@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>藥師健生活 | 內部保健品查詢系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand:#3aab6d;--brand-dark:#2d8a56;--brand-mid:#4ebe80;--brand-light:#6dd4a0;
+  --brand-pale:#edfaf3;--brand-50:#f4fbf7;--brand-100:#b8ecd4;--brand-200:#80d9b0;
+  --accent:#f5a623;--accent-pale:#fff8ec;
+  --gray50:#f8f9fa;--gray100:#f1f3f4;--gray200:#e2e6ea;--gray300:#ced4da;
+  --gray400:#9aa0a6;--gray500:#6c757d;--gray700:#3c4043;--gray900:#202124;
+  --white:#ffffff;--red:#d93025;--redbg:#fce8e6;--amber:#f5a623;--amberbg:#fff8ec;
+  --blue:#1a73e8;--bluebg:#e8f0fe;--purple:#7c3aed;--purple-pale:#ede9fe;
+  --r:12px;--rsm:8px;
+  --sh-xs:0 1px 3px rgba(0,0,0,.06);--sh-sm:0 2px 8px rgba(0,0,0,.08);
+  --sh-md:0 4px 20px rgba(0,0,0,.10);--sh-lg:0 8px 36px rgba(0,0,0,.14);
+  --font:'Noto Sans TC',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--gray50);color:var(--gray900);min-height:100vh;display:flex;flex-direction:column}
+
+header{background:var(--brand-dark);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand-light),var(--brand));border:2px solid rgba(255,255,255,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:19px;height:19px;fill:#fff}
+.logo-cn{font-size:15px;font-weight:700;color:#fff;letter-spacing:.04em}
+.logo-en{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.08em;margin-top:1px}
+.logo-divider{width:1px;height:26px;background:rgba(255,255,255,.2);margin:0 6px}
+.logo-tag{font-size:11px;color:rgba(255,255,255,.55)}
+
+nav{display:flex;gap:2px;align-items:center;flex-wrap:nowrap}
+.nav-btn{padding:6px 12px;border-radius:18px;font-size:12px;font-family:var(--font);font-weight:400;cursor:pointer;border:1.5px solid transparent;transition:all .18s;color:rgba(255,255,255,.72);background:transparent;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.nav-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.active{background:var(--accent);color:var(--brand-dark);border-color:var(--accent);font-weight:600}
+.nav-btn.locked{color:rgba(255,255,255,.38)}
+.nav-btn.locked:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.55)}
+
+main{flex:1;padding:22px 28px;max-width:1180px;width:100%;margin:0 auto}
+.page{display:none}.page.active{display:block}
+
+/* Hero */
+.hero{background:linear-gradient(120deg,var(--brand-dark) 0%,var(--brand-mid) 100%);border-radius:16px;padding:26px 30px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;}
+.hero::after{content:'';position:absolute;right:60px;bottom:-60px;width:160px;height:160px;background:rgba(255,255,255,.03);border-radius:50%;}
+.hero-left h1{font-size:21px;font-weight:700;color:#fff;margin-bottom:5px}
+.hero-left p{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.6;max-width:460px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 13px;margin-top:11px;font-size:11.5px;color:rgba(255,255,255,.85);}
+.hero-badge svg{width:12px;height:12px;fill:var(--accent)}
+.hero-stats{display:flex;gap:22px;flex-shrink:0;z-index:1}
+.stat{text-align:center}
+.stat-num{font-size:24px;font-weight:700;color:var(--accent)}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+
+/* Search */
+.search-row{display:flex;gap:10px;margin-bottom:14px}
+.search-input{flex:1;padding:10px 17px;border:1.5px solid var(--brand-100);border-radius:24px;font-size:14px;font-family:var(--font);outline:none;background:#fff;transition:border .2s,box-shadow .2s;}
+.search-input:focus{border-color:var(--brand-mid);box-shadow:0 0 0 3px rgba(74,190,128,.12)}
+.btn-search{padding:10px 20px;background:var(--brand);color:#fff;border:none;border-radius:24px;font-size:13px;font-family:var(--font);font-weight:600;cursor:pointer;transition:background .18s;}
+.btn-search:hover{background:var(--brand-dark)}
+
+.series-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.series-chip{padding:4px 13px;border-radius:14px;font-size:12px;font-family:var(--font);cursor:pointer;border:1.5px solid var(--brand-100);background:#fff;color:var(--gray500);transition:all .18s;font-weight:500;}
+.series-chip:hover,.series-chip.on{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;font-weight:600;}
+.series-chip.veg-chip:hover,.series-chip.veg-chip.on{background:#15803d;border-color:#15803d;color:#fff;}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.chip{padding:4px 12px;border-radius:14px;font-size:12px;font-family:var(--font);cursor:pointer;border:1.5px solid var(--brand-100);background:#fff;color:var(--gray500);transition:all .18s;}
+.chip:hover,.chip.on{background:var(--brand-50);border-color:var(--brand-mid);color:var(--brand);font-weight:600;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:13px}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:17px;cursor:pointer;transition:all .2s;box-shadow:var(--sh-xs);display:flex;flex-direction:column;}
+.card:hover{border-color:var(--brand-200);box-shadow:var(--sh-md);transform:translateY(-2px)}
+.card-series{font-size:10px;color:var(--gray400);font-weight:500;letter-spacing:.06em;margin-bottom:3px;text-transform:uppercase}
+.card-name{font-size:14px;font-weight:700;color:var(--brand-dark);margin-bottom:3px;line-height:1.4}
+.card-sub{font-size:11px;color:var(--brand-mid);font-weight:500;margin-bottom:6px}
+.card-desc{font-size:12px;color:var(--gray400);line-height:1.65;flex:1;margin-bottom:10px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--gray100);padding-top:8px}
+.badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:11px;font-weight:600}
+.b-adult{background:#e8f5e9;color:#1b5e20}.b-kids{background:#e3f2fd;color:#0d47a1}
+.b-women{background:#fce4ec;color:#880e4f}.b-sport{background:#f3e5f5;color:#4a148c}
+.b-other{background:#fff3e0;color:#e65100}
+.card-more{font-size:11px;color:var(--brand-mid)}
+
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:620px;max-width:100%;max-height:88vh;overflow-y:auto;padding:28px;position:relative;box-shadow:var(--sh-lg)}
+.modal-close{position:absolute;top:15px;right:15px;width:28px;height:28px;background:var(--gray100);border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--gray500);}
+.modal-close:hover{background:var(--gray200)}
+.modal-title{font-size:24px;font-weight:700;color:var(--brand-dark);margin-bottom:2px}
+.modal-sub{font-size:15px;color:var(--brand-mid);font-weight:500;margin-bottom:14px}
+.modal-desc{font-size:14px;color:var(--gray500);line-height:1.8;margin-bottom:14px;padding:14px;background:var(--brand-50);border-radius:8px;border-left:3px solid var(--brand-mid)}
+.info-block{margin-bottom:13px}
+.info-lbl{font-size:11px;font-weight:700;color:var(--brand);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.info-val{font-size:14px;color:var(--gray700);line-height:1.75}
+.info-warn{color:#d97706;font-size:14px;line-height:1.75}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{padding:4px 11px;background:var(--brand-pale);color:var(--brand);border-radius:8px;font-size:13px;font-weight:500}
+.modal-actions{display:flex;gap:10px;margin-top:18px;padding-top:15px;border-top:1px solid var(--gray200)}
+.btn-outline{flex:1;padding:10px;border:1.5px solid var(--brand-mid);color:var(--brand);background:transparent;border-radius:8px;font-size:13px;font-family:var(--font);cursor:pointer;font-weight:500}
+.btn-outline:hover{background:var(--brand-50)}
+
+/* Auth modal */
+.auth-box{text-align:center;padding:8px 0}
+.auth-icon{font-size:52px;margin-bottom:14px}
+.auth-title{font-size:19px;font-weight:700;color:var(--gray900);margin-bottom:6px}
+.auth-sub{font-size:13px;color:var(--gray400);margin-bottom:22px;line-height:1.65}
+.auth-input{width:100%;padding:10px 15px;border:1.5px solid var(--gray200);border-radius:8px;font-size:14px;font-family:var(--font);outline:none;margin-bottom:10px;transition:border .2s}
+.auth-input:focus{border-color:var(--purple)}
+.auth-btn{width:100%;padding:11px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:14px;font-family:var(--font);font-weight:600;cursor:pointer}
+.auth-btn:hover{background:#6d28d9}
+.auth-err{color:var(--red);font-size:12px;margin-top:8px;display:none}
+.auth-cancel{margin-top:12px;font-size:12px;color:var(--gray400);cursor:pointer;text-decoration:underline}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--brand-dark);color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-family:var(--font);z-index:999;transition:transform .3s,opacity .3s;opacity:0;pointer-events:none;box-shadow:var(--sh-md)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Chat */
+.chat-wrap{display:grid;grid-template-columns:205px 1fr;gap:14px;height:calc(100vh - 140px)}
+.chat-side{background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:14px;overflow-y:auto}
+.side-h{font-size:10px;font-weight:700;color:var(--brand);letter-spacing:.08em;margin-bottom:8px}
+.suggest{padding:7px 9px;border-radius:7px;font-size:12px;color:var(--gray500);cursor:pointer;line-height:1.5;margin-bottom:2px;transition:all .15s}
+.suggest:hover{background:var(--brand-50);color:var(--brand)}
+.chat-main{background:#fff;border-radius:var(--r);border:1px solid var(--gray200);display:flex;flex-direction:column;overflow:hidden}
+.chat-hdr{padding:12px 17px;border-bottom:1px solid var(--gray100);display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,var(--brand-dark),var(--brand-mid))}
+.c-av{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)}
+.c-av svg{width:15px;height:15px;fill:#fff}
+.c-name{font-size:13px;font-weight:700;color:#fff}.c-status{font-size:11px;color:rgba(255,255,255,.7)}
+.chat-msgs{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+.msg{display:flex;gap:8px;max-width:85%}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.m-av{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.msg.bot .m-av{background:var(--brand-50);color:var(--brand)}
+.msg.user .m-av{background:var(--brand);color:#fff}
+.m-bub{padding:9px 13px;border-radius:11px;font-size:13px;line-height:1.65}
+.msg.bot .m-bub{background:var(--gray100);color:var(--gray900);border-radius:3px 11px 11px 11px}
+.msg.user .m-bub{background:var(--brand);color:#fff;border-radius:11px 3px 11px 11px}
+.m-time{font-size:10px;color:var(--gray400);margin-top:3px;text-align:right}
+.t-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brand-light);animation:blink 1.2s infinite;margin:0 2px}
+.t-dot:nth-child(2){animation-delay:.2s}.t-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.chat-in-area{padding:11px 15px;border-top:1px solid var(--gray100);display:flex;gap:8px;align-items:flex-end}
+.chat-in{flex:1;padding:9px 13px;border:1.5px solid var(--brand-100);border-radius:18px;font-size:13px;font-family:var(--font);outline:none;resize:none;max-height:90px;transition:border .2s;background:var(--gray50)}
+.chat-in:focus{border-color:var(--brand-mid);background:#fff}
+.btn-send{width:36px;height:36px;background:var(--brand);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-send:hover{background:var(--brand-dark)}
+.btn-send svg{width:14px;height:14px;fill:#fff}
+.btn-send:disabled{background:var(--gray300);cursor:not-allowed}
+
+/* Voice */
+.voice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:13px}
+.voice-card{background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:18px;box-shadow:var(--sh-xs);transition:all .2s}
+.voice-card:hover{box-shadow:var(--sh-md);border-color:var(--brand-200)}
+.vc-header{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.vc-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.vc-icon.green{background:var(--brand-pale)}.vc-icon.blue{background:var(--bluebg)}.vc-icon.amber{background:var(--accent-pale)}.vc-icon.pink{background:#fce4ec}
+.vc-title{font-size:13.5px;font-weight:700;color:var(--gray900)}.vc-sub{font-size:11px;color:var(--gray400);margin-top:2px}
+.vc-desc{font-size:12px;color:var(--gray500);line-height:1.65;margin-bottom:12px}
+.vc-meta{display:flex;gap:12px;margin-bottom:10px}
+.vc-tag{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--gray400)}
+.vc-player{background:var(--gray50);border-radius:8px;padding:10px;display:flex;align-items:center;gap:9px}
+.play-btn{width:34px;height:34px;background:var(--brand);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .18s}
+.play-btn:hover{background:var(--brand-dark)}.play-btn svg{width:13px;height:13px;fill:#fff;margin-left:2px}
+.play-btn.playing{background:var(--accent)}.play-btn.playing svg{margin-left:0}
+.prog-bar{flex:1;height:4px;background:var(--gray200);border-radius:2px;cursor:pointer;position:relative}
+.prog-fill{height:100%;background:var(--brand);border-radius:2px;width:0%;transition:width .1s}
+.prog-time{font-size:11px;color:var(--gray400);white-space:nowrap}
+
+/* Quiz */
+.quiz-wrap{max-width:700px;margin:0 auto}
+.quiz-progress{background:var(--gray200);border-radius:4px;height:5px;margin-bottom:22px}
+.quiz-prog-fill{height:100%;background:var(--brand);border-radius:4px;transition:width .3s}
+.quiz-q{font-size:16px;font-weight:700;color:var(--gray900);margin-bottom:18px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.quiz-opt{padding:12px 16px;border:1.5px solid var(--gray200);border-radius:10px;cursor:pointer;font-size:13px;font-family:var(--font);background:#fff;text-align:left;transition:all .18s;color:var(--gray700)}
+.quiz-opt:hover{border-color:var(--brand-mid);background:var(--brand-50);color:var(--brand)}
+.quiz-opt.selected{border-color:var(--brand);background:var(--brand-50);color:var(--brand);font-weight:600}
+.quiz-opt.correct{border-color:#16a34a;background:#f0fdf4;color:#15803d;font-weight:600}
+.quiz-opt.wrong{border-color:var(--red);background:var(--redbg);color:var(--red);font-weight:600}
+.btn-quiz{padding:9px 22px;border-radius:8px;font-size:13px;font-family:var(--font);font-weight:600;cursor:pointer;transition:all .18s}
+.btn-quiz-primary{background:var(--brand);color:#fff;border:none}
+.btn-quiz-primary:hover{background:var(--brand-dark)}
+.btn-quiz-primary:disabled{background:var(--gray300);cursor:not-allowed}
+.result-circle{width:110px;height:110px;border-radius:50%;border:6px solid var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 18px}
+.result-score{font-size:34px;font-weight:700;color:var(--brand)}
+.result-label{font-size:11px;color:var(--gray400)}
+
+/* Score */
+.score-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-xs)}
+.score-table th{background:var(--brand-dark);color:#fff;padding:11px 14px;text-align:left;font-size:12px;font-weight:600;letter-spacing:.04em}
+.score-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--gray100);color:var(--gray700)}
+.score-table tr:last-child td{border-bottom:none}
+.score-table tr:hover td{background:var(--brand-50)}
+.score-badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:11px;font-weight:600}
+.sb-pass{background:#dcfce7;color:#15803d}.sb-fail{background:#fee2e2;color:#dc2626}
+
+/* Guide */
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px}
+.g-card{background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:20px;box-shadow:var(--sh-xs)}
+.g-n{font-size:30px;font-weight:700;color:var(--brand-100);line-height:1;margin-bottom:7px}
+.g-t{font-size:14px;font-weight:700;color:var(--brand-dark);margin-bottom:5px}
+.g-p{font-size:12px;color:var(--gray400);line-height:1.7;margin-bottom:11px}
+.g-step{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray100);font-size:12px;color:var(--gray500)}
+.g-step:last-child{border:none}
+.g-sn{width:19px;height:19px;background:var(--brand-50);color:var(--brand);border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pg-t{font-size:19px;font-weight:700;color:var(--brand-dark);margin-bottom:3px}
+.pg-s{font-size:13px;color:var(--gray400);margin-bottom:18px}
+.alert{background:var(--amberbg);border:1px solid #f5d882;border-radius:var(--rsm);padding:11px 14px;font-size:13px;color:#7a5c00;margin-bottom:18px;line-height:1.6}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--brand-100);border-radius:3px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" onclick="switchPage('search')">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+    <div><div class="logo-cn">藥師健生活</div><div class="logo-en">PHARGOODS+</div></div>
+    <div class="logo-divider"></div>
+    <div class="logo-tag">內部保健品查詢系統</div>
+  </div>
+  <nav>
+    <button class="nav-btn active" onclick="switchPage('search')">產品查詢</button>
+    <button class="nav-btn" onclick="switchPage('chat')">AI 問答</button>
+    <button class="nav-btn" onclick="switchPage('voice')">🎬 影音教案</button>
+    <button class="nav-btn locked" onclick="requireAuth('quiz')">🔒 測驗</button>
+    <button class="nav-btn locked" onclick="requireAuth('exam')">🔒 考核</button>
+    <button class="nav-btn locked" onclick="requireAuth('score')">🔒 成績</button>
+    <button class="nav-btn" onclick="switchPage('guide')">使用說明</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- SEARCH -->
+<div class="page active" id="page-search">
+  <div class="hero">
+    <div class="hero-left">
+      <h1>藥師健生活 保健品知識庫</h1>
+      <p>由蔡藥師監製，每批產品第三方檢驗把關<br>讓同仁快速找到適合自己的保健品資訊</p>
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        塑化劑、西藥殘留、重金屬 — 每批出貨前皆送第三方檢驗
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">27</div><div class="stat-lbl">項產品</div></div>
+      <div class="stat"><div class="stat-num">2</div><div class="stat-lbl">保健系列</div></div>
+      <div class="stat"><div class="stat-num">全開放</div><div class="stat-lbl">全公司同仁</div></div>
+    </div>
+  </div>
+
+  <div class="search-row">
+    <input class="search-input" type="text" id="searchInput" placeholder="搜尋產品名稱、成分、功效、吃法..." oninput="filterProducts()">
+    <button class="btn-search" onclick="filterProducts()">🔍 搜尋</button>
+  </div>
+
+  <div class="series-row" id="seriesChips">
+    <span class="series-chip on" onclick="setSeries('全部',this)">全部系列</span>
+    <span class="series-chip" onclick="setSeries('成人',this)">💊 成人系列</span>
+    <span class="series-chip" onclick="setSeries('兒童',this)">👶 兒童系列</span>
+    <span class="series-chip veg-chip" onclick="setSeries('素食',this)">🌱 素食保健專區</span>
+    <span class="series-chip" onclick="setSeries('其它',this)">✨ 其它系列</span>
+    <span class="series-chip" onclick="openChartModal('kids')" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-color:#81c784;color:#1b5e20;font-weight:600">📋 兒童版表格</span>
+    <span class="series-chip" onclick="openChartModal('adults')" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-color:#64b5f6;color:#0d47a1;font-weight:600">📊 成人版表格</span>
+  </div>
+
+  <div class="filters" id="filterChips">
+    <span class="chip on" onclick="setFilter('全部',this)">全部需求</span>
+    <span class="chip" onclick="setFilter('上班族',this)">💼 上班族</span>
+    <span class="chip" onclick="setFilter('護眼',this)">👁 護眼</span>
+    <span class="chip" onclick="setFilter('免疫抗發炎',this)">🛡 免疫/抗發炎</span>
+    <span class="chip" onclick="setFilter('熬夜',this)">🌙 熬夜族</span>
+    <span class="chip" onclick="setFilter('便祕',this)">🌿 便祕改善</span>
+    <span class="chip" onclick="setFilter('腰酸背痛',this)">🦴 腰酸背痛</span>
+    <span class="chip" onclick="setFilter('懷孕',this)">🤰 懷孕補充</span>
+    <span class="chip" onclick="setFilter('更年期',this)">🌸 更年期</span>
+    <span class="chip" onclick="setFilter('學齡兒童',this)">🎒 學齡兒童</span>
+    <span class="chip" onclick="setFilter('寶貝成長',this)">🍼 寶貝成長</span>
+    <span class="chip" onclick="setFilter('女性',this)">👩 女性</span>
+    <span class="chip" onclick="setFilter('運動補給',this)">💪 運動補給</span>
+    <span class="chip" onclick="setFilter('素食者',this)">🌱 素食者</span>
+    <span class="chip" onclick="setFilter('銀髮族',this)">🧓 銀髮族</span>
+  </div>
+
+  <div class="grid" id="productsGrid"></div>
+</div>
+
+<!-- CHAT -->
+<div class="page" id="page-chat">
+  <div class="chat-wrap">
+    <div class="chat-side">
+      <div class="side-h">常見問題</div>
+      <div class="suggest" onclick="ss('公司目前哪些保健品最熱銷？')">公司哪些保健品最熱銷？</div>
+      <div class="suggest" onclick="ss('EPA魚油和DHA魚油有什麼差別？')">EPA 和 DHA 魚油差別？</div>
+      <div class="suggest" onclick="ss('益生菌最佳服用時間是？')">益生菌最佳服用時間？</div>
+      <div class="suggest" onclick="ss('孕婦可以服用哪些產品？')">孕婦適合哪些產品？</div>
+      <div class="suggest" onclick="ss('葉黃素攔洸有什麼特色？')">攔洸葉黃素有什麼特色？</div>
+      <div class="suggest" onclick="ss('30而力適合什麼人服用？')">30而力適合什麼人？</div>
+      <div class="suggest" onclick="ss('兒童系列有哪些產品？')">兒童系列有哪些？</div>
+      <div class="suggest" onclick="ss('每日B群和一般B群有什麼不同？')">每日B和一般B群差別？</div>
+      <div class="suggest" onclick="ss('我最近容易疲勞，推薦什麼保健品？')">容易疲勞推薦什麼？</div>
+      <div class="suggest" onclick="ss('素食者可以吃哪些產品？')">素食者可以吃哪些？</div>
+      <div class="side-h" style="margin-top:14px">小提示</div>
+      <div style="font-size:11px;color:var(--gray400);line-height:1.7;padding:0 2px">可詢問成分差異、建議用量、適合族群，或請 AI 根據你的需求推薦產品</div>
+    </div>
+    <div class="chat-main">
+      <div class="chat-hdr">
+        <div class="c-av"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+        <div><div class="c-name">藥師小幫手 PharBot</div><div class="c-status">● 線上服務中 · 由蔡藥師知識庫驅動</div></div>
+      </div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg bot">
+          <div class="m-av">藥</div>
+          <div><div class="m-bub">您好！我是藥師健生活的 PharBot 🌿<br><br>我熟悉公司所有保健品的成分、功效、適合族群與注意事項，也可以根據您的健康需求推薦最合適的產品。<br><br>有任何保健問題，請直接問我！</div><div class="m-time">今天 09:00</div></div>
+        </div>
+      </div>
+      <div class="chat-in-area">
+        <textarea class="chat-in" id="chatInput" rows="1" placeholder="輸入您的問題，按 Enter 送出..." onkeydown="handleKey(event)"></textarea>
+        <button class="btn-send" id="sendBtn" onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VOICE -->
+<div class="page" id="page-voice">
+  <div style="margin-bottom:18px">
+    <div class="pg-t">🎬 影音教案</div>
+    <div class="pg-s">產品知識完整影音教案，分兒童系列與成人系列</div>
+  </div>
+  <div id="voiceGrid"></div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="page-quiz">
+  <div style="margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+    <div><div class="pg-t">📝 產品知識測驗</div><div class="pg-s">完成測驗以驗證您對產品的理解程度</div></div>
+    <button class="btn-quiz btn-quiz-primary" onclick="startQuiz()" id="startQuizBtn">開始測驗</button>
+  </div>
+  <div class="quiz-wrap" id="quizContent">
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:30px;text-align:center">
+      <div style="font-size:46px;margin-bottom:14px">📋</div>
+      <div style="font-size:15px;font-weight:700;color:var(--gray900);margin-bottom:7px">準備好了嗎？</div>
+      <div style="font-size:13px;color:var(--gray400);line-height:1.7;margin-bottom:18px">測驗共 10 題，涵蓋各系列產品知識<br>每題作答後即顯示解析，完成後記錄成績</div>
+      <div style="display:flex;gap:24px;justify-content:center">
+        <div><div style="font-size:22px;font-weight:700;color:var(--brand)">10</div><div style="font-size:11px;color:var(--gray400)">題目數</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--accent)">無限制</div><div style="font-size:11px;color:var(--gray400)">作答時間</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--purple)">70分</div><div style="font-size:11px;color:var(--gray400)">及格標準</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXAM -->
+<div class="page" id="page-exam">
+  <div style="margin-bottom:18px"><div class="pg-t">🎯 正式考核</div><div class="pg-s">季度產品知識正式考核，成績計入個人檔案</div></div>
+  <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:28px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px">
+      <div style="background:var(--brand-50);border-radius:10px;padding:16px;text-align:center"><div style="font-size:26px;font-weight:700;color:var(--brand)">Q2</div><div style="font-size:12px;color:var(--gray500);margin-top:3px">2025 第二季考核</div></div>
+      <div style="background:var(--accent-pale);border-radius:10px;padding:16px;text-align:center"><div style="font-size:26px;font-weight:700;color:var(--accent)">25題</div><div style="font-size:12px;color:var(--gray500);margin-top:3px">考題數量</div></div>
+      <div style="background:var(--purple-pale);border-radius:10px;padding:16px;text-align:center"><div style="font-size:26px;font-weight:700;color:var(--purple)">45分鐘</div><div style="font-size:12px;color:var(--gray500);margin-top:3px">限時作答</div></div>
+    </div>
+    <div style="background:var(--amberbg);border:1px solid #f5d882;border-radius:8px;padding:13px;font-size:13px;color:#7a5c00;margin-bottom:18px;line-height:1.7">⚠️ <strong>注意：</strong>考核每季僅限一次機會，作答中途不可離開頁面，結束後成績立即計入個人紀錄。及格分數 80 分。</div>
+    <div style="margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;color:var(--brand);letter-spacing:.06em;margin-bottom:9px">考核範圍</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <span style="padding:3px 11px;background:var(--brand-pale);color:var(--brand);border-radius:8px;font-size:12px">成人系列全產品</span>
+        <span style="padding:3px 11px;background:#e3f2fd;color:#1565c0;border-radius:8px;font-size:12px">兒童系列全產品</span>
+        <span style="padding:3px 11px;background:#fce4ec;color:#880e4f;border-radius:8px;font-size:12px">女性系列</span>
+        <span style="padding:3px 11px;background:#f3e5f5;color:#6a1b9a;border-radius:8px;font-size:12px">成分差異比較</span>
+        <span style="padding:3px 11px;background:#fff3e0;color:#e65100;border-radius:8px;font-size:12px">注意事項與禁忌</span>
+        <span style="padding:3px 11px;background:#f1f8e9;color:#33691e;border-radius:8px;font-size:12px">適合族群判斷</span>
+      </div>
+    </div>
+    <button onclick="startExam()" style="padding:11px 28px;background:var(--purple);color:#fff;border:none;border-radius:24px;font-size:14px;font-family:var(--font);font-weight:600;cursor:pointer" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='var(--purple)'">🎯 開始本季考核</button>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div class="page" id="page-score">
+  <div style="margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+    <div><div class="pg-t">📊 個人成績記錄</div><div class="pg-s">查看歷次測驗與考核成績</div></div>
+    <select id="scoreFilter" onchange="renderScores()" style="padding:6px 12px;border:1.5px solid var(--gray200);border-radius:8px;font-size:12px;font-family:var(--font);color:var(--gray700);outline:none;cursor:pointer">
+      <option value="all">全部紀錄</option><option value="quiz">測驗</option><option value="exam">考核</option>
+    </select>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px">
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:16px;text-align:center"><div style="font-size:24px;font-weight:700;color:var(--brand)">87</div><div style="font-size:11px;color:var(--gray400);margin-top:2px">平均分數</div></div>
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:16px;text-align:center"><div style="font-size:24px;font-weight:700;color:var(--accent)">12</div><div style="font-size:11px;color:var(--gray400);margin-top:2px">總測驗次數</div></div>
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:16px;text-align:center"><div style="font-size:24px;font-weight:700;color:var(--purple)">3</div><div style="font-size:11px;color:var(--gray400);margin-top:2px">正式考核次數</div></div>
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:16px;text-align:center"><div style="font-size:24px;font-weight:700;color:#16a34a">96%</div><div style="font-size:11px;color:var(--gray400);margin-top:2px">及格率</div></div>
+  </div>
+  <table class="score-table"><thead><tr><th>日期</th><th>類型</th><th>測驗名稱</th><th>分數</th><th>狀態</th><th>耗時</th></tr></thead><tbody id="scoreBody"></tbody></table>
+</div>
+
+<!-- GUIDE -->
+<div class="page" id="page-guide">
+  <div class="pg-t">使用說明</div>
+  <div class="pg-s">藥師健生活內部查詢系統 — 六大功能模組完整說明</div>
+  <div class="alert">⚠ <strong>免責聲明：</strong>本系統資訊僅供內部同仁參考使用。若有特殊健康狀況，仍建議諮詢專業醫療人員或藥師。</div>
+  <div class="g-grid">
+    <div class="g-card"><div class="g-n">01</div><div class="g-t">產品查詢</div><div class="g-p">搜尋全系列保健品，支援關鍵字、系列與需求篩選</div><div class="g-step"><div class="g-sn">1</div><span>選擇系列標籤（成人/兒童/女性/運動/素食）</span></div><div class="g-step"><div class="g-sn">2</div><span>依需求標籤進一步篩選</span></div><div class="g-step"><div class="g-sn">3</div><span>點擊卡片查看完整資訊</span></div></div>
+    <div class="g-card"><div class="g-n">02</div><div class="g-t">AI 問答</div><div class="g-p">PharBot 熟悉所有產品，可回答成分、功效、禁忌</div><div class="g-step"><div class="g-sn">1</div><span>點選「AI 問答」分頁</span></div><div class="g-step"><div class="g-sn">2</div><span>直接輸入問題或點左側建議</span></div><div class="g-step"><div class="g-sn">3</div><span>按 Enter 即可獲得即時回答</span></div></div>
+    <div class="g-card"><div class="g-n">03</div><div class="g-t">語音教案</div><div class="g-p">蔡藥師錄製語音，隨時聆聽學習產品知識</div><div class="g-step"><div class="g-sn">1</div><span>點選「語音教案」分頁</span></div><div class="g-step"><div class="g-sn">2</div><span>選擇想聆聽的教案主題</span></div><div class="g-step"><div class="g-sn">3</div><span>點擊播放按鈕開始學習</span></div></div>
+    <div class="g-card"><div class="g-n">04</div><div class="g-t">測驗 🔒</div><div class="g-p">隨時練習，驗證對產品知識的掌握程度</div><div class="g-step"><div class="g-sn">🔑</div><span>需輸入授權密碼才可存取</span></div><div class="g-step"><div class="g-sn">1</div><span>10 題、隨機出題、即時解析</span></div><div class="g-step"><div class="g-sn">2</div><span>70 分及格，可重複作答</span></div></div>
+    <div class="g-card"><div class="g-n">05</div><div class="g-t">考核 🔒</div><div class="g-p">季度正式考核，成績計入個人檔案</div><div class="g-step"><div class="g-sn">🔑</div><span>需輸入授權密碼才可存取</span></div><div class="g-step"><div class="g-sn">1</div><span>25 題、45 分鐘限時、每季一次</span></div><div class="g-step"><div class="g-sn">2</div><span>80 分及格，成績送主管審閱</span></div></div>
+    <div class="g-card"><div class="g-n">06</div><div class="g-t">成績 🔒</div><div class="g-p">查看個人歷次測驗與考核成績紀錄</div><div class="g-step"><div class="g-sn">🔑</div><span>需輸入授權密碼才可存取</span></div><div class="g-step"><div class="g-sn">1</div><span>顯示平均分數、次數統計</span></div><div class="g-step"><div class="g-sn">2</div><span>可篩選測驗或考核記錄</span></div></div>
+  </div>
+</div>
+
+</main>
+
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
+  <div class="modal" id="modalBox"><button class="modal-close" onclick="closeModal()">✕</button><div id="modalBody"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PRODUCTS=[
+  // ── 成人系列 ──
+  // id:1 EPA70
+  {id:1,name:'EPA70 高純度魚油',sub:'ALASK OMEGA 大廠 · 100% 鱈魚油 · 塑化劑零檢出',series:'成人',
+   cat:['上班族','免疫抗發炎','銀髮族','運動補給','熬夜','腰酸背痛','更年期'],
+   veg:false,
+   desc:'採用美國 ALASK OMEGA 大廠單一魚種 100% 鱈魚油，塑化劑零檢出，EPA 濃度 71%、總 Omega-3 濃度 84% 以上，EE 型態穩定不易氧化、長時間維持 Omega-3 濃度，一日兩粒即滿足所需，每批第三方檢驗（重金屬、塑化劑、西藥殘留）。主要功效：降低發炎反應、減少脂肪堆積在血管壁上、改善末梢血液循環、保養心血管。',
+   ing:'EPA 710mg、DHA 3mg（每日2粒劑量）；來源：100% 阿拉斯加鱈魚油',
+   dose:'每日 2 粒，建議隨餐或飯後食用；加強保養每日 4 粒。若當日已攝取 2～3 份深海魚類，可減少補充量。',
+   fit:'外食族、運動族群、長輩、三高族群、需加強循環與身體修復者、想要保養心血管者',
+   warn:'孕婦、哺乳婦女、重大疾病服藥者、凝血功能不佳者，請先諮詢醫師。避免與鈣、抗凝血藥物同時食用，建議間隔 1～2 小時。近期手術前請暫停服用。請置於孩童不易取得處。',
+   highlights:['ALASK OMEGA 美國大廠','100% 鱈魚油 單一來源','塑化劑零檢出','EPA 濃度 71%，總 Omega-3 達 84%','EE 型態穩定不易氧化','每批第三方檢驗'],
+   qa:[
+     {q:'為什麼選用 EE 型態而非 rTG？',a:'美國和大英營養期刊實驗證實，TG、rTG 和 EE 的吸收效果其實差不多。EE 型態油脂較穩定，可長時間維持 Omega-3 濃度，對身體健康更有益。'},
+     {q:'EPA70 和 EPA80 有什麼差異？',a:'EPA70 來自美國 ALASK OMEGA 大廠 100% 鱈魚油（塑化劑零檢出），EPA80 來自西班牙 Solutex 小型魚種。兩者同為優良魚油來源，提供不同選擇，品質與吸收率皆有保障。'},
+     {q:'一天要吃幾粒才夠？',a:'WHO 建議每日攝取 300～500mg Omega-3，一天 2 粒即可達到日常保養需求。台灣食藥署建議每日 Omega-3 不超過 2000mg。'},
+     {q:'魚油和鈣片可以一起吃嗎？',a:'建議分開補充，相隔至少 1～2 小時。魚油脂肪酸在腸道鹼性環境中可能與鈣結合，降低鈣的吸收率，並可能造成腸胃不適。'},
+     {q:'魚肝油和魚油一樣嗎？',a:'不一樣！魚肝油主要補充維生素 A 和維生素 D；魚油是為了補充 Omega-3（EPA、DHA）。'},
+   ],
+   tags:['ALASK OMEGA大廠','100%鱈魚油','塑化劑零檢出','EPA 71%','Omega-3 84%','EE型態'],
+   link:'https://www.phargoods.com/pages/fish-oil-epa',price:'NT$1,600',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「哈囉您好，我是藥師健生活的XX，因您之前有買過我們的EPA70高純度魚油。」\n「今天打給您主要是因為最近很多平常有在健身、重訓、跑步的客戶，都在補充我們新款的EPA70高純度魚油，我看到您之前也有購買，所以想說跟您分享一下，看您最近訓練狀況怎麼樣？」\n（等客戶回應）'},
+     {section:'二、聊天式建立需求',content:'「我很多運動客戶其實都有一個共同問題，像是：\n・練完恢復比較慢\n・肌肉容易痠很久\n・長期重訓關節卡卡\n・外食多、油炸多\n您最近比較偏向哪一種呀？」\n（讓客戶講）'},
+     {section:'三、產品帶入',content:'「其實很多健身族現在會固定補EPA，因為EPA主要就是幫助：\n・降低身體發炎反應\n・幫助循環代謝\n・運動後修復比較順\n・長期保養心血管\n尤其重訓、跑步、熬夜工作的人，身體其實都很需要Omega-3。」'},
+     {section:'四、產品特色',content:'「我們這款EPA70跟一般魚油不太一樣，它是：\n✔ EPA濃度高達71%\n✔ Omega-3濃度84%以上\n✔ 阿拉斯加鱈魚單一魚種來源\n✔ 塑化劑零檢出\n✔ 一天吃兩顆就夠\n很多客戶喜歡的是它吃起來不太會有魚腥味，然後濃度高，不用吞很多顆。」'},
+     {section:'五、拒絕處理',content:'拒絕1：「我已經有在吃魚油了」\n「其實很好耶，代表您本來就有保養觀念。很多客戶後來會改吃EPA70，主要是因為它EPA濃度比較高，對運動後恢復、循環代謝幫助會更明顯，而且一天兩顆就夠，負擔比較小。」\n\n拒絕2：「我再考慮看看」\n「沒問題～因為健身族其實很吃身體恢復速度，很多人是吃一陣子後會發現隔天疲勞感差很多。」\n\n拒絕3：「魚油不是都差不多？」\n「很多人一開始也這樣覺得。但其實魚油差別最大的是：\n・Omega-3濃度\n・EPA含量\n・原料來源\n・有沒有重金屬跟塑化劑檢驗\n如果濃度劑量太低，一天可能要吃到四五顆以上才有感。」'},
+     {section:'六、成交收尾',content:'「我會比較建議您現在就先補起來，尤其您平常有在運動，身體修復跟循環其實很重要。而且我們這款一天兩顆就好，很方便。」\n「這次我先幫您安排X組，您平常餐後吃就可以了，好嗎？」'},
+   ]},
+
+  // id:2 DHA70
+  {id:2,name:'DHA70 高純度魚油',sub:'腦部與視力發育首選 · 孕哺媽咪與成長孩童',series:'成人',
+   cat:['護眼','上班族','懷孕','免疫抗發炎','熬夜','更年期','銀髮族'],
+   veg:false,
+   desc:'DHA 主要存在於腦神經系統與視網膜，幫助腦部發育、提升認知能力、專注力與記憶力，對幼兒視力發展和長者視網膜神經修復扮演重要角色。TG 型態接近天然，每批第三方檢驗（重金屬、塑化劑、西藥殘留）。建議隨餐或飯後食用，避免與鈣同時補充。',
+   ing:'DHA 700mg、EPA 20mg（每日2粒劑量）；來源：深海小型魚種',
+   dose:'每日 2 粒，建議隨餐或飯後食用；加強保養每日 4 粒。',
+   fit:'孕哺媽咪（幫助胎兒腦部與視力發育）、成長中孩童、學齡兒童（加強學習力與記憶力）、需護眼保養的成人與銀髮族',
+   warn:'孕婦、哺乳婦女、重大疾病服藥者、凝血功能不佳者，請先諮詢醫師；孕婦 32 週以上建議諮詢醫師後再補充。避免與鈣、抗凝血藥物同時食用，建議間隔 1～2 小時。請置於孩童不易取得處。',
+   highlights:['DHA 700mg 高濃度 腦部視力首選','幫助腦部發育提升學習力','孕哺媽咪與孩童適用','TG 型態接近天然','每批第三方檢驗'],
+   qa:[
+     {q:'EPA、DHA 和 4832 魚油有什麼差異？',a:'EPA70 主要幫助心血管保養、末梢循環改善、抗慢性發炎，適合外食族、運動族群及長輩。DHA70 幫助腦部與視神經發育，適合孕哺媽咪與孩童。4832 魚油為 48% EPA + 32% DHA，是結合兩種功能的綜合型配方，適合想做日常保健的成人。'},
+     {q:'孕婦可以補充嗎？',a:'DHA 對胎兒腦部和視力發育非常重要，建議補充。但仍請先諮詢婦產科醫師確認適合的劑量。'},
+     {q:'魚肝油和魚油一樣嗎？',a:'不一樣！魚肝油主要補充維生素 A 和維生素 D；魚油是為了補充 Omega-3（EPA、DHA）。'},
+   ],
+   tags:['DHA 700mg','腦部視力','孕哺媽咪','孩童適用','TG型態','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/fish-oil-dha',price:'NT$1,500',
+   sales:[
+     {section:'一、開場破冰',content:'「您好，我是藥師健生活的XX，之前您有購買過我們家的保健產品，這次只是做老客戶關心，不耽誤您太久喔～」\n「最近很多上班族都在補DHA，我第一個想到您，所以想說簡單跟您分享一下。」\n（等客戶回應）'},
+     {section:'二、建立需求',content:'「我想請問您最近工作是不是也都長時間看電腦、手機比較多？」\n「很多客戶現在都反應：\n・下午容易腦袋鈍鈍的\n・注意力容易分散\n・開會或工作容易疲累\n・晚上滑手機後眼睛很乾\n其實這都跟DHA消耗很有關係。」\n「因為DHA本來就是腦部跟視神經很重要的營養，但現在外食族其實很難靠吃魚補足。」'},
+     {section:'三、產品介紹',content:'「我們這款是DHA70高純度魚油，跟一般市售魚油不太一樣，它是高濃度DHA配方，主要就是做腦部跟晶亮保養。」\n「產品重點：\n・DHA濃度高達70%以上\n・Omega-3濃度高\n・採用高品質魚油來源\n・有做重金屬跟塑化劑檢驗\n・一天補充2顆就很足夠」\n\n「很多上班族吃一段時間後會覺得：\n・思緒比較清楚\n・工作比較不容易卡卡\n・開車或盯螢幕沒那麼疲累\n・專注度會比較穩定」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我有在吃別的魚油」\n「很好耶，代表您本來就有保養觀念。不過一般魚油很多是EPA比較高，偏循環保養；我們這款DHA70是特別針對腦部跟專注力設計，所以方向不太一樣。」\n\n拒絕2：「我現在不需要」\n「其實很多客戶一開始也這樣覺得，但現在最傷的反而是長時間用腦跟用眼。尤其上班族每天看螢幕，DHA消耗真的很快，通常都是感覺疲勞了才開始補。」\n\n拒絕3：「太忙了懶得吃」\n「所以我們才做成一天2顆就夠，很方便，飯後直接吃就可以了，不會很麻煩。」'},
+     {section:'五、成交收尾',content:'「我覺得您如果平常工作用腦量大，其實很適合先做基礎保養。」\n「這次老客戶剛好有優惠，我先幫您帶X組，好嗎？」\n（若猶豫）「沒關係，您可以先從一組開始吃看看，很多客戶都是吃完才發現差很多。」'},
+   ]},
+
+  // id:3 4832
+  {id:3,name:'4832 高純度魚油',sub:'48% EPA + 32% DHA · 綜合型日常保健',series:'成人',
+   cat:['上班族','免疫抗發炎','運動補給','便祕'],
+   veg:false,
+   desc:'EPA 48% + DHA 32% 天然黃金比例，接近魚體內原始的 Omega-3 比例，如同濃縮了一整條魚的精華，一瓶同時補充兩種 Omega-3，兼顧心血管保養與腦部視力健康，適合想做全方位日常保健的成人。rTG 型態高濃度高吸收，每批第三方檢驗（重金屬、塑化劑、西藥殘留）。',
+   ing:'EPA 480mg、DHA 320mg（每日2粒劑量）',
+   dose:'每日 2 粒，建議隨餐或飯後食用；加強保養每日 4 粒。若當日已攝取 2～3 份深海魚類，可減少補充量。',
+   fit:'想同時補充 EPA 和 DHA 的成人、日常全方位心腦血管保健、不想分別購買兩種魚油者',
+   warn:'孕婦、哺乳婦女、重大疾病服藥者、凝血功能不佳者，請先諮詢醫師。避免與鈣、抗凝血藥物同時食用，建議間隔 1～2 小時。請置於孩童不易取得處。',
+   highlights:['EPA + DHA 雙效合一','天然 48:32 黃金比例','接近魚體原始 Omega-3','一瓶搞定心血管+腦部保健','rTG 型態高濃度高吸收','每批第三方檢驗'],
+   qa:[
+     {q:'4832 和 EPA70、DHA70 有什麼差異？',a:'EPA70 專注心血管與抗發炎，DHA70 專注腦部與視力，4832 是兩者的綜合版，採天然 48:32 比例，適合想一次補齊兩種 Omega-3 的日常保健需求。'},
+     {q:'一天要吃幾粒才夠？',a:'WHO 建議每日攝取 300～500mg Omega-3，一天 2 粒即可達到日常保養需求。台灣食藥署建議每日 Omega-3 不超過 2000mg。'},
+     {q:'魚油和鈣片可以一起吃嗎？',a:'建議分開補充，相隔至少 1～2 小時。魚油脂肪酸在腸道鹼性環境中可能與鈣結合，降低鈣的吸收率，並可能造成腸胃不適。'},
+   ],
+   tags:['48:32黃金比例','EPA+DHA雙效','日常全方位','rTG型態','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/4832-fish-oil',price:'NT$1,550',
+   sales:[
+     {section:'一、開場',content:'「您好～請問是X先生／X小姐嗎？」\n「我是之前您有購買過保健商品的健康顧問XXX，今天拜訪您是因為最近很多上班族客戶都有在詢問『魚油』保養，我這邊順便關心一下您平常有沒有在補充Omega-3呢？」'},
+     {section:'二、聊天建立需求',content:'（如果客戶說「沒有耶」，接）\n「其實現在很多上班族都很容易有這種狀況，像是：\n・常常外食\n・久坐久盯電腦\n・晚睡壓力大\n・精神容易疲累\n・覺得循環差、思緒卡卡\n這些其實都跟Omega-3攝取不足很有關係。」'},
+     {section:'三、帶入產品',content:'「我們最近很多客戶在補充的是『4832高純度魚油』，它跟一般魚油不太一樣：\n✔ 48% EPA＋32% DHA\n✔ 心血管循環＋思緒專注一起保養\n✔ 採用高品質魚油來源\n✔ 塑化劑零檢出\n✔ 一天兩顆就夠\n\n很多上班族會覺得吃一陣子後：\n・精神比較沒那麼悶\n・開會比較能集中\n・晚上比較不容易累到爆掉」'},
+     {section:'四、引導需求',content:'「因為像您平常工作應該也蠻忙的吧？您自己會比較在意：\n1️⃣ 精神體力\n2️⃣ 循環保養\n3️⃣ 長期健康預防\n哪一塊呢？」\n（讓客戶自己講）'},
+     {section:'五、拒絕處理',content:'拒絕1：「我現在沒有需要」\n「可以理解～很多客戶一開始也是這樣說，但後來發現平常真的太少吃魚，尤其外食其實很難吃到足夠Omega-3。像WHO其實建議每天都要補充足量Omega-3，但光靠飲食真的不太容易。」\n\n拒絕2：「我有吃別牌魚油」\n「很好耶，代表您本身就很有保養觀念。那您現在吃的魚油有特別看：\n✔ Omega-3濃度\n✔ EPA/DHA比例\n✔ 有沒有塑化劑檢驗嗎？\n因為魚油主要著重在濃度和劑量，要夠不然吃很多顆才夠。」\n\n拒絕3：「魚油不是都差不多？」\n「其實差很多耶～像我們這支4832魚油是高純度配方，EPA跟DHA比例比較平衡，比較適合一般成人日常保養。而且來源單純、檢驗完整，很多客戶就是吃得安心才固定回購。」'},
+     {section:'六、成交收單',content:'「我會比較建議您可以先帶一組回去吃看看，通常大概2～4週很多人就會開始有感覺精神跟循環比較順。」\n「而且魚油這種東西不是刺激型的，是長期幫身體打底保養。」\n「我這邊幫您安排現在大家補充最多的組合，好嗎？」'},
+   ]},
+
+  // id:4 攔洸葉黃素【升級版】
+  {id:4,name:'攔洸葉黃素',sub:'【升級版】Bio-gen金盞草 · AstaPure®蝦紅素 · 玻尿酸40mg · 山桑子花青素',series:'成人',
+   cat:['護眼','上班族','熬夜','素食者','銀髮族'],
+   veg:true,
+   desc:'升級版攔洸葉黃素，Bio-gen 金盞草萃取游離型葉黃素：玉米黃素 10:2 最佳黃金比例，每顆葉黃素與玉米黃素含量較舊版增加 150%，一天一顆即滿足所需。頂級 AstaPure® 紅藻萃取蝦紅素（非蝦蟹來源，過敏者可食）、足量 40mg 吃的玻尿酸、山桑子萃取花青素，全方位守護眼部健康，飛行員保養首選，每批第三方檢驗（西藥、重金屬、塑化劑）。純素配方，全素可食。',
+   ing:'Bio-gen 金盞草萃取游離型葉黃素 15mg、玉米黃素（10:2 黃金比例）、AstaPure® 紅藻萃取蝦紅素、玻尿酸 40mg、山桑子萃取花青素（每粒）',
+   dose:'每日 1 粒，建議隨含油脂餐點（飯後）服用以提升吸收率。7 歲以上兒童至成人皆適用，常使用 3C 超過 1 小時的孩子飯後補充 1 粒。',
+   fit:'3C 重度使用者（手機、電腦、平板）、長時間用眼的上班族與學生、黃斑部保養需求者、飛行員、銀髮族視力保養',
+   warn:'懷孕、哺乳、生理期間或大量出血時、身體不適者禁止使用。4 歲以下孩童不建議使用。有特殊疾病者建議諮詢醫師後評估。對本產品任何成分過敏者禁忌。葉黃素需持續補充 3 個月以上方能有感，勿期待立竿見影。',
+   highlights:['升級版含量增加150%，一天一顆','Bio-gen金盞草游離型葉黃素','AstaPure®紅藻蝦紅素（非蝦蟹過敏者可食）','足量玻尿酸40mg 吃的保養','山桑子萃取花青素','純素配方 全素可食 每批第三方檢驗'],
+   qa:[
+     {q:'舊版跟新版的差異？',a:'升級版每顆葉黃素和玉米黃素含量增加 150%，一天一顆即滿足所需，仍維持 10:2 最佳黃金比例。新增足量 40mg 玻尿酸（提升水潤感）與紅藻萃取蝦紅素（舒緩眼部疲勞、抗氧化），帶來全方位升級保護。'},
+     {q:'兒童可以吃嗎？',a:'藥師建議小朋友優先從原型食物（地瓜葉、菠菜等深綠色蔬菜）攝取葉黃素。若孩子常使用手機平板超過 1 小時、不愛吃蔬菜，可每日一次飯後補充 1 粒（建議 7 歲以上）。'},
+     {q:'是素的嗎？',a:'攔洸葉黃素是純素配方，其中的玻尿酸與蝦紅素都不含動物性成分，全素可以放心補充！'},
+     {q:'孕婦可以吃嗎？',a:'生理期間可以正常攝取。孕婦建議諮詢婦產科醫師。'},
+     {q:'對海鮮過敏可以吃嗎？',a:'可以！升級版的蝦紅素來自純淨養殖紅藻萃取，不含任何蝦蟹成分，對蝦蟹過敏者也可以安心補充。'},
+   ],
+   tags:['Bio-gen金盞草','游離型葉黃素10:2','AstaPure®蝦紅素','玻尿酸40mg','山桑子花青素','純素全素可食'],
+   link:'https://www.phargoods.com/pages/lutein',price:'NT$1,400',
+   sales:[
+     {section:'一、開場',content:'「喂您好～我是藥師健生活總公司客服XX，之前您有購買過我們家的攔洸葉黃素，主要是想關心一下您最近用眼狀況？」\n「因為現在很多上班族每天電腦、手機幾乎都超過8小時，眼睛容易乾、酸、晚上滑手機特別疲勞，所以我才想說關心您一下～」'},
+     {section:'二、建立需求',content:'（客戶回：「對啊，最近很累」）\n「真的齁～現在眼睛幾乎都沒在休息。那我想問一下，您平常是工作長時間盯電腦比較多？還是下班手機追劇滑比較久？」\n（等客戶回答）\n「難怪～像這種長時間藍光刺激，其實很多人不是只有痠而已，還會開始有乾澀、容易模糊、甚至越晚越不舒服。」'},
+     {section:'三、產品帶入',content:'「其實這次很多老客戶回購，就是因為新版攔洸葉黃素有升級。」\n「除了葉黃素跟玉米黃素維持10:2黃金比例之外，還多加了蝦紅素、玻尿酸跟山桑子花青素。」\n「很多3C族都會特別有感，因為不只是保養而已，連長時間盯螢幕後的疲勞感、水潤感都有一起顧到。」\n\n「而且我們這款是游離型葉黃素，比較好吸收，一天一顆就可以，不用吃很多顆。很多客戶都是放辦公桌，餐後直接補充，很方便。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我還有」\n「沒問題～很多老客戶也是會提前補，因為葉黃素是每天累積型保養，通常都不會等到完全沒了才補，這樣中間比較不會斷掉。」\n\n拒絕2：「太忙了沒時間吃」\n「我懂～所以現在大家才會喜歡一天一顆的，很多客戶都固定放公司，吃午餐順手補充就好，沒有什麼負擔。」\n\n拒絕3：「我現在沒感覺」\n「其實很多人也是等到開始乾、酸、模糊才發現用眼過度。但葉黃素比較像平常保養，尤其現在每天藍光接觸這麼久，提早顧通常會比較輕鬆。」'},
+     {section:'五、成交收尾',content:'「剛好這次老客戶回購方案還不錯，我幫您安排X組會比較划算，而且很多人現在都是一次補2～3個月份，比較不怕中斷。」\n「我直接幫您打單出貨，OK嗎？」'},
+   ]},
+
+  // id:5 每日B
+  {id:5,name:'每日B 天然來源B群',sub:'市售唯一添加苯磷硫胺 · 8種B群+27種礦物質胺基酸 · 純素抗酸膠囊',series:'成人',
+   cat:['上班族','熬夜','免疫抗發炎','素食者','護眼','便祕','腰酸背痛','更年期','運動補給','銀髮族'],
+   veg:true,
+   desc:'市售第一支添加苯磷硫胺（benfotiamine）的 B 群，比一般維生素 B1 高達 300 倍吸收率！天然萃取酵母B群 8 種 B 群 + 27 種礦物質與必需胺基酸，額外添加芥末子萃取硒（54 微克/顆）促進新陳代謝；藥師指定純素抗酸膠囊包覆，不只隔絕 B 群氣味，更保護成分不受胃酸破壞、直達小腸吸收，一天一粒好吞嚥，每批第三方檢驗（西藥、重金屬、塑化劑）。',
+   ing:'天然萃取酵母B群 B1、B2、B3、B5、B6、B7、B9（葉酸）、B12，芥末子萃取硒 54 微克，27 種礦物質與必需胺基酸（每粒）；純素抗酸膠囊',
+   dose:'每日 1 粒，建議飯後補充吸收效果更佳。若有服用藥物，建議相隔 2 小時再補充。',
+   fit:'所有人日常使用，尤其適合外食族、運動族群、上班族、熬夜族、素食者（硒攝取可能不足者）、銀髮族（牙口不好硒不足者）、孕婦（葉酸足量）',
+   warn:'服用後尿液偏黃為正常現象（B2 水溶性代謝，非未吸收）。晚上吃不影響睡眠——每日B不含咖啡因、牛磺酸等提神成分，天然B群反而幫助色胺酸轉換為菸鹼酸，達到放鬆好入眠效果。若同時服藥，建議間隔 2 小時。',
+   highlights:['市售唯一添加苯磷硫胺（300倍B1吸收率）','天然萃取酵母B群 不會有B群尿','8種B群+27種礦物質與胺基酸','芥末子萃取硒 54微克/顆','純素抗酸膠囊 直達小腸','每批第三方檢驗'],
+   qa:[
+     {q:'誰適合每日B？',a:'每日B能幫助能量代謝，讓日常攝取的營養素更完整被身體利用，適合所有人日常使用，尤其外食族、運動族群更需要每天補充。天然酵母萃取，吃完不會有俗稱「B群尿」的狀況。'},
+     {q:'每日B與市面B群最大的差別是什麼？',a:'每日B使用天然萃取酵母B群，並添加市售唯一的苯磷硫胺（比一般B1高達300倍吸收率），搭配純素抗酸膠囊直達小腸，不受胃酸破壞，且每批第三方檢驗，一天一粒滿足所需。'},
+     {q:'吃B群後尿尿很黃，是沒有完整吸收嗎？',a:'不是！尿液變黃是因為維生素 B2 水溶後呈黃螢光色，這是正常的代謝現象，並不代表沒有吸收。'},
+     {q:'飯前還是飯後吃？晚上吃會不會睡不著？',a:'B群在一天當中任何時段都是可以補充的，建議飯後補充每日B更好吸收唷！每日B不含咖啡因、牛磺酸等興奮成分，晚上吃不會影響睡眠，天然B群反而能幫助放鬆好入眠。'},
+     {q:'吃了B群反而想睡覺是正常的嗎？',a:'正常！B群無法直接提供能量，主要是幫助將飲食中的營養素轉化成能量。若身體已處於疲勞狀態，建議先充足飲食與睡眠，再搭配B群才能發揮最佳效果。'},
+     {q:'B群不能跟什麼一起吃？',a:'B群與其他食物及營養素較不會交互影響，一般不造成不適。若有服藥，建議相隔 2 小時再補充。'},
+   ],
+   tags:['苯磷硫胺300倍B1','天然萃取酵母B群','8種B群+27種礦物質','芥末子萃取硒','純素抗酸膠囊','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/vitamin-b-complex',price:'NT$840',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「您好～請問是XXX先生／小姐嗎？」\n「我是藥師健生活總公司客服，我姓X，今天主要是做個售後關心，主要是看到您之前有補充每日B，想關心一下最近工作跟精神狀況還好嗎？」\n（等客戶回答）'},
+     {section:'二、輕鬆聊天建立需求',content:'（如果客戶說「最近很累」，接）\n「真的很多上班族都這樣耶，現在普遍工時長、外食又多，常常睡醒還是累，下午特別容易沒精神。」\n「您自己會不會有：\n・下午容易疲累\n・早上起不來\n・常常外食\n・下班沒體力\n・甚至休息了還是覺得疲勞\n這種狀況？」\n（讓客戶講）'},
+     {section:'三、自然帶產品',content:'「其實很多客戶後來固定補充我們這支『每日B』之後，精神狀況跟體力維持會比較有感。」\n「它跟一般外面B群最大的差別是：我們是天然萃取酵母B群，不是化學合成那種高劑量，所以吸收利用率會比較好，也比較不容易有吃完有B群尿的狀況。」\n「而且裡面有添加現在比較少見的『苯磷硫胺』，是維生素B1的進階型，吸收率比一般B1高很多，很多上班族會特別喜歡這點。」\n\n「所以我們這款每日B，沒有加那種很刺激的提神成分，比較偏向幫助營養代謝，所以晚上吃也不用太擔心。」\n「一天一顆就可以，蠻多上班族都會當日常保養在補充。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我現在有在吃別的B群」\n「有補充觀念很好耶，其實現在很多客戶也是比較後才換成天然酵母B群。因為很多市售B群雖然劑量高，但身體不一定吸收得到，反而容易變成有俗稱『B群尿』的狀況。我們這支比較偏向『吸收利用率』，一天一顆就很方便，上班族接受度很高。」\n\n拒絕2：「我再考慮看看」\n「可以呀，我完全理解。只是我會建議您，現在如果常常疲累、外食、精神不好，其實身體是在提醒營養代謝開始跟不上了。B群不像提神飲料，它比較像每天幫身體把能量運作調整好，所以很多客戶都是固定保養後差很多。」\n\n拒絕3：「我很少吃保健食品」\n「其實越忙的上班族越容易缺B群耶。尤其外食、熬夜、壓力大，消耗速度會很快，很多人不是沒體力，是營養代謝效率變差。」'},
+     {section:'五、收單成交',content:'「我幫您安排最方便的方式就好，您一天只要一顆。」\n「很多客戶都是先吃一個月看看精神跟疲勞感變化。」\n「我這邊先幫您安排X組，您方便超商還是宅配呢？」'},
+   ]},
+
+  // id:6 鎂鈣力
+  {id:6,name:'鎂鈣力 天然萃取鈣鎂',sub:'愛爾蘭海藻鈣 · 法國海洋鎂 · 鈣鎂 2:1 · 純素配方',series:'成人',
+   cat:['腰酸背痛','更年期','懷孕','女性','素食者','銀髮族','上班族','熬夜','運動補給'],
+   veg:true,
+   desc:'選用愛爾蘭純淨海域海藻鈣（富含 70 種礦物質）+ 法國海洋鎂（由海水抽出物，含 45% 鎂與 72 種海洋礦物質），採符合人體吸收的鈣鎂 2:1 比例，額外添加海藻萃取維生素D、純素豌豆蛋白質，全素配方純素膠囊，幫助骨骼牙齒正常發育、肌肉與心臟正常收縮、放鬆入睡，每批第三方檢驗（重金屬、塑化劑、西藥殘留）。',
+   ing:'愛爾蘭海藻鈣 200mg、法國海洋鎂 100mg（鈣鎂 2:1）、海藻萃取維生素D、純素豌豆蛋白質（每日2粒）',
+   dose:'一般保養每日 2 粒，建議睡前補充；加強保養每日 4 粒（睡前 2 粒＋早上 2 粒）。若有補充魚油須分開，至少相隔 2 小時。',
+   fit:'超過 9 成國人鈣質攝取不足的成人、女性、孕哺媽媽、銀髮族、青少年、運動族群、淺眠易抽筋者、素食者',
+   warn:'12 歲以下兒童每日最多 2 粒，建議優先從飲食攝取或選擇「兒童鈣鎂成長配方」。若有補充魚油須分開至少 2 小時（避免腸胃不適）。勿與鐵劑同時服用，相隔至少 2 小時。',
+   highlights:['愛爾蘭海藻鈣 200mg、法國海洋鎂 100mg','法國海洋鎂 72種礦物質','鈣鎂 2:1 完美吸收比率','全素配方 純素膠囊','額外添加維生素D＋豌豆蛋白','每批第三方檢驗'],
+   qa:[
+     {q:'孕婦、哺乳期可以吃嗎？',a:'可以！孕婦補鈣非常重要，植物膠囊包覆無異味，可安心補充。'},
+     {q:'小朋友可以吃鎂鈣力嗎？',a:'可以，12 歲以下最多每日 2 粒。建議優先從日常飲食攝取鈣質，或選擇「兒童鈣鎂成長配方」更適合孩童需求。'},
+     {q:'補鈣會便秘嗎？',a:'腸胃吸收較差時補鈣容易便秘，建議少量多次補充並多喝水，有助有效吸收。'},
+     {q:'吃鎂鈣力真的能幫助睡眠嗎？',a:'鈣可維持神經傳導、調節肌肉與心臟收縮；鎂則維持循環系統、調節體內鈣離子濃度，幫助肌肉放鬆好入睡，特別適合淺眠易抽筋者。'},
+     {q:'素食者可以補充嗎？',a:'可以！鎂鈣力為全素配方，純素膠囊，素食者可安心食用。'},
+     {q:'魚油和鎂鈣力可以一起補充嗎？',a:'建議分開補充，至少相隔 2 小時，避免魚油脂肪酸與鈣結合影響吸收，並預防腸胃不適。'},
+   ],
+   tags:['愛爾蘭海藻鈣','法國海洋鎂','鈣鎂2:1','純素膠囊','全素可食🌱','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/calcium',price:'NT$1,360',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「您好，我是藥師健生活的XXX，之前有購買過我們的保健食品鎂鈣力對嗎？」\n（客戶回應）\n「今天主要是關心您最近的身體狀況，因為我們很多上班族會員最近都有反應，工作壓力大、睡不好、肩頸緊、半夜容易抽筋或睡醒還是很累，所以我才特別跟您分享一個很多客戶回購的『鎂鈣力』。」'},
+     {section:'二、建立需求',content:'「我想先了解一下，您最近會不會有：\n・晚上不好睡？\n・淺眠容易醒？\n・偶爾腳抽筋？\n・久坐肩頸緊繃？\n・喝咖啡比較多？」\n（客戶只要中一個就接）\n「其實這很多都是現代人鎂跟鈣攝取不足的狀況，尤其外食族、常喝咖啡、壓力大的人很常見。」'},
+     {section:'三、產品介紹',content:'「我們這款鎂鈣力比較特別的是：\n✔ 用的是愛爾蘭海藻鈣\n✔ 法國海洋鎂\n✔ 而且是人體吸收最好的鈣鎂2:1比例\n不是只有缺鈣而已，很多人其實缺的是『鎂』，所以才會容易緊繃、睡不好、抽筋。」\n\n「很多上班族白天壓力大、晚上腦袋停不下來，其實不是年紀問題，而是礦物質流失很快。尤其咖啡、熬夜、外食都會讓鈣跟鎂流失更快。」\n「而且我們每批都有做第三方檢驗，重金屬、塑化劑、西藥殘留都有驗過，吃起來會比較安心。」'},
+     {section:'四、試探成交',content:'「其實很多客戶都是睡前先吃2顆，大概一段時間就會覺得比較放鬆、比較好睡，半夜抽筋也有改善。」\n「我會建議您可以先帶一組試看看，先讓身體補足基礎礦物質。」'},
+     {section:'五、拒絕處理',content:'拒絕1：「我現在沒有感覺缺鈣」\n「很多人其實不是骨頭痛才叫缺鈣喔，像疲勞、睡不好、容易緊繃、抽筋，很多都跟鎂鈣不足有關。」\n\n拒絕2：「我平常有喝牛奶」\n「其實現在很多人即使有喝牛奶，鎂還是嚴重不足，而且吸收率也不一定夠，所以我們才會搭配海洋鎂一起補充。」\n\n拒絕3：「我怕吃太多保健品」\n「可以理解，所以我們這款反而是走基礎保養型，不是刺激性的產品，而且很多客戶都是晚上固定補充2顆而已，身體負擔不大。」'},
+     {section:'六、成交收尾',content:'「那我幫您先安排一組體驗看看，您先吃睡前保養，通常上班族都會蠻有感的。」\n「如果之後覺得睡眠、放鬆度不錯，再持續補充就可以了。」'},
+   ]},
+
+  // id:7 天然酵母鋅 | 素食者保留
+  {id:7,name:'天然酵母鋅',sub:'天然烘焙酵母萃取 · 每顆15mg足量 · 全素可食',series:'成人',
+   cat:['免疫抗發炎','上班族','素食者','熬夜','便祕','運動補給'],
+   veg:true,
+   desc:'使用天然烘焙酵母菌萃取，同時補充礦物質與維生素，相較化學合成更好吸收、生物利用率更高。每顆含 15mg 鋅（約等於 6 顆生蠔的鋅含量），一顆滿足每日攝取量，全素可食，孕婦可食。鋅是體內僅次於鐵的第二大必需微量礦物質，參與蛋白質、碳水化合物及脂肪的代謝、免疫系統運作等重要生理機能，由於人體無法自行合成，每天都需要從食物或額外補充。每批第三方檢驗。',
+   ing:'天然烘焙酵母萃取鋅 15mg（每粒）；全素膠囊',
+   dose:'每日 1 粒，建議飯後補充。鋅避免與鈣、鐵、高纖維食物、茶、咖啡、含鎂補充品同時服用，建議間隔 2 小時。',
+   fit:'熬夜加班族（鋅幫助恢復因疲勞受損的細胞）、熱愛運動族（加速肌肉恢復、提升耐力）、想提升幸福力的男性（維持睪固酮濃度）、素食者（植物性食物含鋅量較少）、銀髮族（飲食較不均衡）、容易掉髮者、皮膚出油長痘者、受傷或手術患者（幫助傷口癒合）、兒童青少年（有助成長發育）',
+   warn:'每日補充上限 35mg。孕婦可食。若同時補充鈣或鎂，建議間隔 2 小時。',
+   highlights:['天然烘焙酵母萃取 非化學合成','每顆15mg ≈ 6顆生蠔含鋅量','一顆滿足每日攝取量','增強免疫力、改善肌肉恢復','減少掉髮、調節皮脂分泌','全素可食 孕婦可食'],
+   qa:[
+     {q:'鋅什麼時候吃？',a:'飯前或飯後都可以。由於鋅的種類和個人體質不同，空腹食用較容易造成腸胃刺激，藥師建議飯後補充！'},
+     {q:'鋅不能跟什麼一起吃？',a:'鋅避免與鈣、鐵、高纖維食物、茶、咖啡、含鎂補充品同時服用，建議間隔 2 小時後補充，以免影響吸收。'},
+     {q:'可以跟30而力一起補充嗎？',a:'可以！日常保健每天建議攝取量為 12～15mg，補充上限是 35mg/天，一起補充也不會有過量的問題。'},
+     {q:'鋅可以晚上吃嗎？',a:'可以！按照生理作息、方便補充即可。特別留意若睡前有補充鈣、鎂的習慣，建議白天補充鋅，分開吸收效果更好！'},
+     {q:'補充過量的鋅怎麼辦？',a:'短期過量攝取通常不會有嚴重後果，多喝水並觀察身體即可。但長期過量仍可能造成副作用，建議停用一段時間並就醫檢查微量元素。'},
+     {q:'女生可以補充嗎？',a:'可以！鋅能幫助蛋白質的合成，對女性朋友在養顏美容、生理期和懷孕期的保養都十分重要，補鋅並非男性的專利，女生也要多留意！'},
+   ],
+   tags:['天然烘焙酵母萃取','15mg足量','全素可食','孕婦可食','增強免疫','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/zinc',price:'NT$820',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「您好～我是藥師健生活總公司客服XX，之前您有購買過我們的酵母鋅，想跟您關心一下最近的使用狀況～」\n「您會購買鋅是因為平常工作壓力大、熬夜或有在運動呢？如果是的話應該會蠻適合，所以簡單跟您分享一下～」\n（等客戶回應）\n「因為現在很多男生其實都有：容易累、精神差、運動恢復慢、常熬夜、掉髮、食慾差這些狀況，很多都跟『鋅攝取不足』有關。」'},
+     {section:'二、建立需求',content:'上班族版\n「像您平常工作會常加班或晚睡嗎？」（客戶回：「會啊。」）\n「其實熬夜跟壓力大的人，很容易把體內鋅消耗掉，很多人會開始覺得精神差、比較沒元氣、容易疲勞。」\n\n健身族版\n「您平常有在運動或健身嗎？」（客戶回：「有。」）\n「那您一定知道恢復很重要，其實鋅跟蛋白質合成、肌肉修復很有關係，很多健身族都會固定補鋅，讓恢復跟體力維持比較穩。」\n\n男性需求版\n「而且鋅其實也是男生很重要的營養，很多男性保健品裡面一定都會有鋅，因為跟體力、精神、日常狀態都有關。」'},
+     {section:'三、產品介紹',content:'「我們這款比較特別的是『天然酵母鋅』，不是一般化學合成鋅。」\n「天然酵母來源吸收率比較好，身體比較容易利用。」\n「而且一顆就有15mg鋅，剛好是一天建議補充量，吃法很簡單，一天一顆就好。」\n\n「像很多客人吃一陣子後會回饋：\n・比較有精神\n・運動恢復比較快\n・食慾比較正常\n・晚上比較不容易累垮\n・有些人甚至覺得掉髮狀況有差\n尤其男生跟健身族回購率其實蠻高的。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我再考慮看看」\n「可以呀～因為保健品本來就是要自己覺得適合。只是最近很多男生都趁活動一起補，平均一天其實不到一杯飲料錢，還是我先幫您保留現在的優惠，之後若您在活動時間內有想購買也比較不會買貴。」\n\n拒絕2：「我平常飲食就有吃肉」\n「有吃肉當然很好，但其實現在外食族很難每天穩定吃到足量鋅。像一顆15mg，大概接近好幾顆生蠔的鋅含量，所以很多上班族還是會額外補充比較方便。」\n\n拒絕3：「我現在沒有感覺需要」\n「很多客人也是這樣想，但鋅其實不像感冒會立刻有感，它比較像是幫身體底子打穩。通常熬夜、壓力、運動量大的人，補充一段時間會比較有感覺。」'},
+     {section:'五、成交收單',content:'「那我這邊先幫您安排現在的優惠組，您每天一顆補充就可以了，比較不會工作累、運動恢復慢時才想到要補。」\n「這次幫您直接安排宅配，您方便用之前的地址嗎？」'},
+   ]},
+
+  // id:8 莓日C | 素食者保留，便祕刪小莓好→莓日C仍在便祕
+  {id:8,name:'莓日C 天然莓果維他命C',sub:'法國西印度櫻桃萃取 · 純素抗酸膠囊 · 每顆100mg',series:'成人',
+   cat:['免疫抗發炎','上班族','懷孕','女性','素食者','熬夜','便祕','更年期'],
+   veg:true,
+   desc:'嚴選法國西印度櫻桃萃取粉，西印度櫻桃為目前已知維生素C含量最豐富的水果，天然來源較化學合成更好吸收。純素抗酸膠囊包覆，避免有效成分在胃部快速釋放來不及吸收，到小腸才完整釋放，效果更長效。每顆含維生素C 100mg，一顆滿足每日需求。每批第三方檢驗（塑化劑、西藥殘留、重金屬）。',
+   ing:'法國西印度櫻桃萃取粉（維生素C 100mg / 每粒）；純素抗酸膠囊',
+   dose:'一般成人每日 1 粒；加強補充每日 2 粒。建議餐後補充吸收更好。（每日維生素C攝取不得超過 2000mg）',
+   fit:'需提升免疫力的成人、上班族、熬夜族、愛美族群（美白促進膠原合成）、孕婦（每日建議120mg）、哺乳媽媽（每日建議140mg）、素食者',
+   warn:'每日攝取不得超過 2000mg。不論中藥或西藥建議間隔 2 小時補充。兒童建議 4 歲以上再開始補充，應優先從原型食物均衡攝取。',
+   highlights:['法國西印度櫻桃天然萃取','維生素C含量最豐富水果來源','純素抗酸膠囊 直達小腸吸收','每顆100mg 一顆滿足每日需求','純素配方 全素可食','每批第三方檢驗'],
+   qa:[
+     {q:'莓日C 何時補充？怎麼吃？',a:'維生素C是水溶性維生素，空腹或餐後都可以補充，但有食物輔助吸收更好，建議餐後補充！'},
+     {q:'素食者可以補充嗎？',a:'可以！莓日C使用純素膠囊包覆天然莓果粉末，是純素的，素食者可以安心補充！'},
+     {q:'兒童也可以服用莓日C嗎？',a:'建議 4 歲以上再開始補充！也建議兒童應優先從原型食物中均衡攝取營養，如有不足再額外補充。7～9 歲每日上限 650mg；10～12 歲每日上限 1200mg；13 歲以上保養 1 顆，加強 2 顆。'},
+     {q:'每日要攝取多少維生素C？',a:'一般成人每日建議攝取 100mg；孕婦每日約 120mg；哺乳中的媽媽每日 140mg。每日維生素C攝取不得超過 2000mg。'},
+     {q:'吃莓日C可以美白嗎？',a:'維生素C能抑制黑色素形成，幫助皮膚美白，同時也能幫助皮膚裡的膠原蛋白生成，是維持皮膚漂亮所需要的營養素。'},
+     {q:'莓日C可以跟藥品或保健品一起補充嗎？',a:'不論中藥或西藥，建議間隔 2 小時補充，避免交互影響。其餘保健品基本上都可以一起補充！'},
+   ],
+   tags:['法國西印度櫻桃','天然萃取100mg','純素抗酸膠囊','美白促膠原','純素全素可食','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/natural-vitamin-c',price:'NT$690',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「您好，請問是X小姐／先生嗎？我是藥師健生活總公司客服XX，之前您有購買過我們的莓日C，今天主要是做老客戶健康關心啦～也想問問您目前使用狀況？」'},
+     {section:'二、建立需求',content:'「因為現在很多上班族長時間看電腦、熬夜、外食，真的很容易有幾個狀況：\n・早上容易疲累沒精神\n・換季容易不舒服\n・氣色比較差、暗沉\n・作息不正常皮膚容易不穩定\n我想了解一下，您平常會有這種感覺嗎？」\n（等客戶回答）\n（客戶有感覺）「對啊，其實很多客戶跟您一樣，所以後來都會固定補充維生素C。」\n（客戶說還好）「那很好耶，代表您平常有在照顧自己。不過像現在壓力、外食、飲食不均，其實很多人維生素C還是不太夠，所以會建議用保健方式穩定補充。」'},
+     {section:'三、產品介紹',content:'「我們這款莓日C比較多人喜歡的是：\n・使用天然西印度櫻桃來源，不是一般化學合成C\n・做成抗酸膠囊，成分不易被胃酸破壞\n・一顆就有一天需要的100mg維生素C\n・而且有第三方檢驗，吃起來比較安心\n很多上班族會固定早上或飯後補充，精神跟氣色都會比較有感。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我現在有在吃別的維他命C」\n「那很好耶，代表您本來就有保養觀念。只是很多客戶後來會改吃莓日C，是因為它是天然來源＋抗酸膠囊，成分不被破壞，吸收較好。」\n\n拒絕2：「我很少感冒，不需要吧」\n「其實很多客戶一開始也這樣說。但現在大家補充維生素C，不只是保護力而已，更多是針對疲勞、氣色、外食營養不足做日常保養。」\n\n拒絕3：「我考慮看看」\n「可以啊～保健品本來就是適合再補充。只是現在很多老客戶都會趁活動先補起來，平均一天其實才十幾塊，等於一杯飲料的一小部分而已。」'},
+     {section:'五、成交收單',content:'「那我這邊先幫您安排一組體驗，您先吃看看最準。很多客戶大概1～2週就會比較有感覺精神跟氣色。」\n「我幫您直接寄到之前的地址可以嗎？」\n（確認地址後）\n「好的，那這邊幫您安排，收到後飯後補充就可以了，我們客服之後也會再關心您的使用狀況。」'},
+   ]},
+
+  // id:9 五百益生菌
+  {id:9,name:'五百益生菌',sub:'500億 CFU · 3種專利功能複方菌 · 五層包埋技術',series:'成人',
+   cat:['便祕','上班族','免疫抗發炎','銀髮族','熬夜'],
+   veg:false,
+   desc:'每包出場菌數高達 500 億 CFU，嚴選三種專利功能複方菌粉（益生暢／益生衛／益生敏），分別幫助排便順暢、維護腸胃健康、改善過敏；獨家五層包埋技術不怕膽鹽與胃酸，讓好菌完整抵達小腸定殖；通過常溫活存測試，無須冷藏，每批第三方檢驗（西藥、重金屬、塑化劑）。',
+   ing:'益生暢菌、益生衛菌、益生敏菌（三種專利複方菌粉，每包 500 億 CFU）',
+   dose:'一般空腹或飯後皆可補充。1 歲以上每日 1 包；加強保養 1 歲以上早晚各 1 包。幼兒怎麼吃：建議 6 個月以上，未滿 1 歲的小朋友每日半包即可。',
+   fit:'便祕困擾者、腸胃不適者、容易過敏者（過敏是不正常發炎的一種）、長期服藥者、出差旅遊族、銀髮族、免疫力保健需求者',
+   warn:'不同菌種可能在體內競爭，建議一次選擇一種益生菌產品使用 1～3 個月後再評估更換。若同時服用藥物，建議間隔至少 2 小時補充。',
+   highlights:['每包 500 億 CFU 高菌數','3種專利功能複方菌（暢/衛/敏）','五層包埋技術 耐胃酸耐膽鹽','通過常溫活存測試 不用冷藏','奶素配方','每批第三方檢驗'],
+   qa:[
+     {q:'吃多久才有效？',a:'建議持續每日補充至少 3～6 個月，先讓腸道環境逐漸轉變為利於好菌生長的狀態，同時抑制壞菌，讓好菌成為腸道內的優勢菌。'},
+     {q:'為什麼能改善過敏？',a:'菌的代謝物會透過循環影響我們的健康。腸道好菌建立後，壞菌被抑制，人體發炎反應得到改善，過敏（不正常的發炎反應）也會因此改善，間接提升免疫功能。'},
+     {q:'可以同時吃很多種益生菌嗎？',a:'過多菌數可能對腸胃造成刺激引起腹瀉，不同菌種也可能在體內競爭導致功效減弱。建議一次選擇一種益生菌使用 1～3 個月後再視情況更換。'},
+     {q:'素食可以吃嗎？',a:'五百益生菌為奶素配方。'},
+     {q:'需要冷藏嗎？',a:'不需要！五百益生菌通過常溫活存測試，一般存放即可。冰箱濕氣較重，產品來回進出冰箱反而可能造成受潮，影響保存品質。'},
+   ],
+   tags:['500億CFU','3種專利複方菌','五層包埋技術','常溫保存','奶素','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/-probiotics',price:'NT$1,300',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「喂您好，我是藥師健生活的總公司客服○○，您之前有購買過我們五百益生菌、所以想簡單關心一下，會購買益生菌是因為工作忙、外食多，腸胃比較容易鬧脾氣，像脹氣、排便不順嗎？」'},
+     {section:'二、建立需求',content:'「我先請問一下喔～您平常會不會有這幾種情況：\n・常外食、飲食不固定\n・下午容易脹氣\n・排便不順、不固定\n・熬夜壓力大\n・換季容易鼻子癢、打噴嚏\n很多上班族其實都有，只是習慣了。」\n（客戶回答後接）\n「對～其實這種大多跟腸道菌相有關，現在很多人不是沒吃，而是好菌不夠。」'},
+     {section:'三、產品介紹',content:'「我們這款五百益生菌，很多客戶喜歡是因為它不是一般低菌數益生菌，它一包有500億好菌，而且是專利包埋技術，好菌比較不容易被胃酸破壞，可以幫助真正到腸道作用。」\n「很多上班族吃一陣子後會覺得：\n・排便比較順\n・肚子比較輕鬆\n・外食後比較不容易脹\n・換季狀況比較穩定\n而且它不用冰，攜帶很方便，放公司也可以。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我現在沒需要」\n「我懂，其實很多客戶一開始也覺得自己還好，但通常都是等到腸胃真的亂掉、排便不順很久才開始重視。益生菌比較像日常保養，尤其外食族其實很適合先養好菌叢。」\n\n拒絕2：「我有在吃別牌」\n「很好耶，代表您本來就有保養觀念。那您可以看看我們這款是500億菌數加專利包埋，不是只有吃進去而已，而是希望好菌真的能存活到腸道。」\n\n拒絕3：「太貴了」\n「其實很多客戶後來會繼續吃，是因為他們發現有效比較重要。除了有效，我們第三方自主檢驗也是讓您吃得安心，身體健康一點都不貴。」'},
+     {section:'五、成交收尾',content:'「剛好這次老客戶都有做回購優惠，我會比較建議您先帶一組試試看，通常吃1～3個月腸胃感受就會開始比較明顯，3個月比較能達到平衡，持續補充6個月好菌的優勢會更顯現出來。」'},
+   ]},
+
+  // id:10 D3液態 | 成人版，與兒童D3同源同配方
+  {id:10,name:'非活性維生素D3（液態）',sub:'成人版非活性維生素D3 · 全年齡適用',series:'成人',
+   cat:['免疫抗發炎','懷孕','更年期','女性','銀髮族','上班族','熬夜','腰酸背痛','便祕'],
+   veg:false,
+   desc:'蔡藥師與兒童專科蒼藍鴿醫師共同研發，瑞士DSM大廠 Quali®-D 羊毛脂來源，每滴精準 400IU，無色無味無添加，水素取代維生素E讓油脂不易氧化變質，一瓶含約 1200 滴，0 歲新生兒至 100 歲銀髮族全家人皆可補充，每批兩家以上第三方檢驗把關。',
+   ing:'維生素D3（Quali®-D 羊毛脂萃取）400IU / 滴、中鏈脂肪酸（MCT）、水素醍醐粉',
+   dose:'成人每日 2 滴（800IU）；嬰幼兒每日 1 滴（400IU）。可直接滴入口中，或加入 40°C 以下飲料、食物中補充，建議隨餐或飯後使用。',
+   fit:'日曬不足的室內工作者、銀髮族、孕婦及哺乳媽媽、秋冬季節日照減少族群、免疫力保健需求者、骨骼保養族群',
+   warn:'洗腎患者請諮詢醫師後再補充。羊毛脂來源，蛋奶素可食。滴管不要碰到嘴巴及口水，避免造成變質。開封後請放置常溫陰涼處，避免陽光直射，勿冷藏（冷藏可能造成油脂分層）。',
+   highlights:['瑞士DSM Quali®-D 羊毛脂來源','每滴 400IU，每滴僅 0.7 元','一瓶約 1200 滴 CP 值最高','水素取代維生素E 不易氧化','0歲至100歲全家適用','兩家以上第三方檢驗'],
+   qa:[
+     {q:'是素的嗎？',a:'羊毛脂萃取自綿羊剪下的毛，透過精煉方式提取，蛋奶素可食用。'},
+     {q:'白天還是晚上吃比較好？',a:'白天或晚上影響不大，建議飯後或隨餐補充；比起補充時間，更重要的是長期穩定補充！'},
+     {q:'開封後要冰嗎？',a:'不建議冷藏，冰箱低溫可能讓油脂出現分層。請放在常溫、陽光不直射的地方保存。'},
+     {q:'成人版與兒童版有什麼差異？',a:'兩者同樣使用瑞士DSM羊毛脂萃取，每滴同樣是 400IU，配方相同。成人建議每日 2 滴，嬰幼兒每日 1 滴。'},
+     {q:'為什麼選擇用滴劑？',a:'滴劑比錠劑、膠囊吸收度與穩定度更高，可加入食物中方便快速補充，無成型賦形劑、無額外添加物。'},
+     {q:'添加水素醍醐粉是什麼功用？',a:'維持油脂滴劑的穩定性，讓每一滴維生素D不被氧化並維持足夠劑量；比市售添加維生素E的D3口感較不油膩，也較不易有油耗味。'},
+   ],
+   tags:['Quali®-D瑞士DSM','400IU/滴','水素醍醐粉','蛋奶素','成人版','兩家第三方檢驗'],
+   link:'https://www.phargoods.com/pages/adultd3',price:'NT$850',
+   sales:[
+     {section:'一、開場破冰',content:'「您好～請問是X先生/小姐嗎？」\n「您之前有購買過我們產品的XXX，想關心一下您最近使用狀況～」\n「這次打給您主要是因為最近很多上班族客人都在補充『維生素D3』，尤其長時間待室內、下班晚、比較少曬太陽的人，其實很容易攝取不足，所以想說也順便跟您分享一下～」\n「現在工作大部分也是長時間在室內嗎？」'},
+     {section:'二、建立需求',content:'「真的現在很多人都這樣～尤其像上班族早出晚歸，幾乎沒什麼曬太陽機會，加上外食比較多，其實維生素D很容易不足。」\n「很多客人一開始也只是覺得：\n・比較容易疲累\n・精神不好\n・換季容易不舒服\n・長期久坐、肩頸痠\n・經常生病或感染\n後來才發現跟維生素D不足有關。」\n\n「我們這款是『非活性維生素D3』，是身體可以自行調節吸收的形式，負擔比較小，而且是滴劑型，好吸收、使用也方便。」'},
+     {section:'三、產品介紹',content:'「我們這款很多客人喜歡的點是：\n✔ 瑞士DSM大廠羊毛脂萃取D3來源，吸收率很好\n✔ 無色無味\n✔ 滴劑型，比膠囊更方便\n✔ 一滴400IU，成人一天大概2滴就夠\n✔ 一瓶大約1200滴，CP值很高」\n「而且很多客人會放辦公桌，每天滴兩滴就好，很方便。」'},
+     {section:'四、自然帶成交',content:'「我這邊幫您看一下，您之前有購買紀錄，這次剛好有老客戶補充方案。」\n「很多客人都是：『一瓶自己吃、一瓶給家人』，因為現在幾乎全家都很少曬太陽。」\n「您今天補充比較划算，要先幫您補一組(X瓶)還是直接帶家庭組(囤貨組)比較划算呢？」'},
+     {section:'五、拒絕處理',content:'拒絕1：「我平常有曬太陽」\n「有曬太陽很好耶～但其實現在很多人就算有通勤，也未必達到有效日曬時間。而且防曬、室內工作、下班時間晚，其實都會影響合成，所以很多上班族還是會額外補充。我們這款就是很方便，每天兩滴就好，不會有負擔。」\n\n拒絕2：「我現在沒有需要」\n「了解～其實很多客人一開始也不是身體不舒服才補充，比較像是平常保養。因為維生素D跟骨骼、肌肉、精神狀態、保護力都有關，現在很多醫師也都會建議平常就維持補充。尤其您如果平常比較少曬太陽，其實蠻適合的。」\n\n拒絕3：「我考慮看看」\n「可以呀～只是這次老客戶方案剛好有做，很多客人都會趁這次先補起來。而且它保存方便、一天只要兩滴，其實很容易持續補充。我先幫您留優惠，這樣您不用之後恢復原價比較可惜～可以跟客人約定下次的拜訪時間。」'},
+   ]},
+
+  // id:11 關鍵咖好力 | 腰酸背痛刪除、更年期刪除（改由EPA70承接）
+  {id:11,name:'關鍵咖好力',sub:'西班牙藥廠 C-n2 · 六大關鍵配方 · 關節保健首選',series:'成人',
+   cat:['銀髮族','運動補給','上班族'],
+   veg:false,
+   desc:'專為長輩與運動員開發的關節保健品，使用西班牙製藥級大廠製作的非變性二型膠原蛋白 C-n2（Collavant n2），每顆足量添加 40mg，是葡萄糖胺與軟骨素效果的兩倍。六大關鍵配方：C-n2、雞冠玻尿酸、橄欖果萃取羥基酪醇、軟骨素、葡萄糖胺、薑黃，不只補充更幫助自身合成！每批第三方檢驗（西藥、重金屬、塑化劑）。',
+   ing:'C-n2（非變性二型膠原蛋白）40mg、雞冠玻尿酸 20mg、橄欖果萃取物 50mg、葡萄糖胺 150mg、軟骨素 100mg、薑黃 100mg（每粒）',
+   dose:'每日 1 粒；加強 2 粒。建議空腹或餐前服用效果最佳，可選擇於任一餐前 1 小時食用。素食者不建議。建議持續補充 3 個月以上效果更顯著。',
+   fit:'關節不適者、腰酸背痛族群、銀髮族、運動量大的族群、長期久坐工作者',
+   warn:'懷孕、哺乳、生理期間或大量出血時、身體不適者禁止使用。4 歲以下孩童不建議使用。有特殊疾病者建議諮詢醫師後評估。對本產品任何成分過敏者禁忌。請置於孩童不易取得處。',
+   highlights:['西班牙製藥級大廠 C-n2 來源','每顆足量 40mg，葡萄糖胺效果2倍','六大關鍵配方一次到位','橄欖果萃取羥基酪醇抗發炎','不只補充更幫助自身合成','每批第三方檢驗'],
+   qa:[
+     {q:'誰適合補充關鍵咖好力？',a:'關鍵咖好力專為長輩與運動員開發，使用西班牙製藥級大廠的非變性二型膠原蛋白 C-n2，搭配玻尿酸、軟骨素幫助關節靈活，並特別添加 50mg 橄欖果萃取物（富含羥基酪醇），幫助減緩體內發炎不適。建議持續補充 3 個月以上效果更顯著。'},
+     {q:'每顆成分含量？',a:'C-n2 40mg、雞冠玻尿酸 20mg、橄欖果萃取物 50mg、葡萄糖胺 150mg、軟骨素 100mg、薑黃 100mg。'},
+     {q:'橄欖果、薑黃添加的實際幫助為何？',a:'橄欖果萃取含有羥基酪醇，薑黃含有薑黃素，這兩項都是抗氧化及抗發炎的營養素，能幫助舒緩體內發炎引起的關節不適感。'},
+     {q:'C-n2、UC2、UC-II 有什麼差別？',a:'「C-n2」是 Collavant n2 的縮寫，是藥師健生活使用的西班牙製藥級大廠非變性二型膠原蛋白的註冊名稱。「UC-II」為美國隆沙（LONZA）的非變性二型膠原蛋白註冊名稱，因商標權只有隆沙廠商能使用。「UC2」為廠商自創俗稱，目前經美國隆沙法律處置後已不能合法使用，因此藥師健生活全面標示為「C-n2」。'},
+   ],
+   tags:['C-n2西班牙製藥大廠','六大關鍵配方','40mg足量','橄欖果羥基酪醇','軟骨素葡萄糖胺','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/uc2',price:'NT$1,850',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「喂您好～請問是X先生／小姐嗎？我是藥師健生活總公司客服XX～」\n「主要是因為之前您有買關鍵咖好力，關心一下使用狀況，您是因為平常上班久坐、久站、或者有在運動，想要做關節跟行動力的保養嗎？所以想關心一下您最近身體狀況如何？」\n（停一下等客人回應）'},
+     {section:'二、建立需求',content:'上班族版\n「很多上班族因為坐久站久後，膝蓋會痠、上下樓梯卡卡的，尤其天氣變化會更明顯，您自己會嗎？」\n\n運動族版\n「像有在運動的人，其實最怕的不是沒練到，是關節磨損累積，很多人跑步、重訓後會覺得膝蓋緊緊的，您運動後會有這種感覺嗎？」\n\n銀髮族版\n「很多長輩其實平常都還能走，但會慢慢覺得蹲下站起來沒以前輕鬆，或者走久會痠，您最近活動力還OK嗎？」'},
+     {section:'三、產品帶入',content:'「因為現在很多人都不是等到不舒服才保養，而是提早顧關節。」\n「我們這款『關鍵咖好力』，跟一般只有葡萄糖胺的不太一樣，它裡面是做六重關鍵配方。」\n「最重要的是西班牙藥廠的非變性第二型膠原蛋白C-n2，一顆就有40mg足量添加，另外還有玻尿酸、葡萄糖胺、軟骨素、薑黃跟橄欖果萃取。」\n「很多客人補充一段時間後會覺得，走路比較順、上下樓梯比較輕鬆，運動後恢復感也比較好。」\n\n「而且我們這款有做西藥、重金屬、塑化劑檢驗，配方相對單純，很多長輩跟運動族都固定在吃。」\n「它不是止痛那種立即感，而是偏向把關節需要的營養慢慢補起來，所以通常會建議至少持續補充2～3個月，效果會比較穩定。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我現在沒有不舒服」\n「其實很多客人一開始也是這樣說，但關節跟牙齒很像，等真的磨損明顯時會比較辛苦，所以現在很多人都會提早保養，尤其如果平常久站、運動量大或常爬樓梯，其實都算高使用族群。」\n\n拒絕2：「我有在吃別的」\n「可以喔～很多客人本來就有補葡萄糖胺，但後來改吃這款，是因為它除了葡萄糖胺，還多了C-n2跟玻尿酸，完整度會更高一些。」\n\n拒絕3：「太貴了」\n「我懂您意思，現在保健品很多。但其實很多客人後來會固定補充，是因為覺得行動舒服、走路輕鬆，生活品質差很多，所以會覺得這筆花得值得。」'},
+     {section:'五、成交話術',content:'「剛好最近很多老客戶都會一次帶2～3盒做完整保養，這樣補充比較不容易中斷。」\n「我幫您安排X組最剛好，您平常是白天比較方便收貨，還是晚上呢？」\n（直接進入收件流程）'},
+   ]},
+
+  // id:12 30而麗 | 不變
+  {id:12,name:'30而麗 極萃美妍果凍',sub:'七大美妍配方 · 低糖低卡每包25卡 · 蘋果風味',series:'成人',
+   cat:['更年期','熬夜','女性'],
+   veg:false,
+   desc:'膠原蛋白果凍棒，七大美妍配方，有效維持怦怦感。添加膠原蛋白、蛋白聚醣、玻尿酸、穀胱甘肽、余甘子、Q10、百香果子，低糖低卡，每包僅 25 卡，好吃不負擔。蘋果風味擺脫膠原蛋白的腥臭味，每批產品通過第三方檢驗（塑化劑、重金屬、西藥）。',
+   ing:'魚鱗膠原蛋白 200mg、玻尿酸 10mg、穀胱甘肽 13mg、Q10有效成分 10.5mg（每包）',
+   dose:'早上空腹或睡前 1～2 小時補充。每日 1～3 包（3 包為足量）。直接食用或冷藏後享用。',
+   fit:'想維持肌膚彈性與水潤感的女性、25 歲以上美容保養需求者、更年期肌膚保養',
+   warn:'15 歲以下小孩、懷孕或哺乳期間婦女及服用抗凝血藥品之患者不宜食用。',
+   highlights:['七大美妍配方一次到位','每包僅25卡 低糖低卡','蘋果風味 無腥臭味','魚鱗膠原蛋白200mg','Q10 + 穀胱甘肽 + 玻尿酸','每批第三方檢驗'],
+   tags:['七大美妍配方','低糖低卡25卡','蘋果風味','魚鱗膠原蛋白','Q10穀胱甘肽玻尿酸','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/30-women',price:'NT$1,830',
+   sales:[
+     {section:'一、開場',content:'「您好～我是藥師健生活總公司客服XX，之前您有購買過我們的30而麗，想跟您關心一下最近的使用狀況～」\n（客戶願意接聽）\n「因為很多女生平時上班壓力大、作息不固定，皮膚容易乾、氣色比較差，所以很多老客戶最近都在回購我們這款『30而麗膠原蛋白』，我也順便關心一下您最近保養狀況。」'},
+     {section:'二、建立需求',content:'「我想問一下，您最近是不是也常常忙到比較晚？很多女生其實不是沒保養，而是熬夜、工作壓力大之後，會開始覺得皮膚比較乾、氣色沒以前好。」\n（客戶有共鳴）\n「對～尤其女生過30之後，很多人都會開始覺得膚況不像以前那麼穩定。像現在很多上班族女生，白天工作忙、外食多、睡眠也不固定，其實膠原流失速度會比以前快很多。」'},
+     {section:'三、產品帶入',content:'「所以現在很多女生都會固定補充膠原蛋白做日常保養。」\n「我們這款30而麗，很多客戶喜歡是因為它不是那種很甜膩的美容飲，是攜帶方便的果凍條，比較偏日常內在保養型。」\n「很多女生固定補充一段時間後，都會覺得氣色比較亮、皮膚比較有澎潤感，上妝也比較服貼。」\n「而且現在女生最怕的不是沒保養，是保養做很多但看起來還是累，所以很多人會從裡面開始補。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我再考慮看看」\n「可以呀～我完全不會勉強您。只是因為這次是舊客戶優惠，很多女生其實都是先帶一組試看看，覺得適合後才固定補充。」\n\n拒絕2：「我現在有在吃別的」\n「那很好耶，代表您本來就很有保養觀念。其實很多女生現在也都是搭配補充，因為膠原蛋白算是女生很基本的日常保養。」\n\n拒絕3：「最近比較忙」\n「我懂～現在女生真的都超忙。所以很多人反而會選這種每天固定補充、比較省時間的保養方式。」'},
+     {section:'五、成交',content:'「您今天是想先帶一組試看看，還是兩組一起補比較划算呢？」'},
+   ]},
+
+  // id:13 小莓好 | 素食者刪除、便祕刪除
+  {id:13,name:'小莓好 蔓越莓益生菌',sub:'Exocyan™法國蔓越莓 · D-甘露糖1000mg · SNZ1969凝結芽孢乳桿菌',series:'成人',
+   cat:['更年期','懷孕','女性'],
+   veg:false,
+   desc:'3合1莓好配方，業界添加最高劑量！法國 Exocyan™ 蔓越莓萃取，含 68% A 型前花青素（PACs），每包足量 48.3mg（超越藥師建議最低有效量 36mg）；D-甘露糖每包足量 1,000mg 為市場最高劑量，快速沖刷壞因子；SNZ 1969 凝結芽孢乳桿菌（日本藥廠御用、獲 GRAS/GRAS 認證）耐酸耐熱、菌種存活率高，調節女性私密菌叢生態。蛋奶素可食，孕哺可食（建議諮詢醫師）。每批第三方檢驗。',
+   ing:'法國 Exocyan™ 蔓越莓萃取物（前花青素 PACs 48.3mg）、D-甘露糖 1,000mg、SNZ 1969 凝結芽孢乳桿菌（每包）',
+   dose:'日常保養每日 1 包；加強保養每日 3 包，建議補充一週以上。飯前飯後都可以，優先建議空腹或飯前補充。可加入 40°C 以下飲品立即飲用。蛋奶素可食。孕哺因體質特殊建議諮詢醫師後補充。',
+   fit:'忙碌上班族（常憋尿者）、曾有私密困擾或容易反覆感染者、喜愛穿緊身褲者、生理期女性、日夜顛倒壓力大者、更年期後雌激素減少者、性生活頻繁者、喝水量少或愛喝含糖飲料者、孕婦媽咪、男性（亦可補充，維持泌尿道健康）',
+   warn:'建議每日 1 包，多食無益。加入飲品需在 40°C 以下，並立即飲用完畢。若有在服用藥物，建議先諮詢醫師。若狀況嚴重，建議儘早尋求專業醫師協助。蛋奶素可食，非純素。',
+   highlights:['法國Exocyan™蔓越莓 PACs 48.3mg','D-甘露糖1000mg 市場最高劑量','SNZ1969凝結芽孢乳桿菌 耐酸耐熱','3合1配方 業界最高劑量','蛋奶素可食 孕哺可諮詢醫師補充','每批第三方檢驗'],
+   qa:[
+     {q:'一天可以吃一包以上嗎？',a:'小莓好每包營養足量添加，多食無益，建議一天一包，定期補充就可以！'},
+     {q:'生理期期間可以吃嗎？',a:'可以！但如果生理期間容易腸胃敏感，建議初次先分次服用，並觀察身體狀況。'},
+     {q:'什麼時候補充最好？吃多久會有感？',a:'任何時間點都可以補充，優先建議空腹或飯前。建議同時調整正常生活作息。若狀況嚴重，建議儘早尋求專業醫師協助！'},
+     {q:'如果有在服用藥物可以吃嗎？',a:'建議先諮詢醫師，以免造成益生菌與藥物交互影響。'},
+     {q:'小莓好為何吃起來有些微苦味？',a:'苦味來源是「前花青素」，其本身為多酚類化合物的特性，如許多蔬菜水果的苦味來源一樣。特別搭配蔓越莓減緩苦味的感受。'},
+     {q:'小莓好可以加入飲品使用嗎？',a:'可以！加入飲品使用可減少苦澀口感，建議加入 40°C 以下的飲品，並立即飲用完畢。'},
+     {q:'男生可以吃嗎？',a:'可以！小莓好的成分有助於維持泌尿道健康，不論男女都可以補充。'},
+   ],
+   tags:['法國Exocyan™蔓越莓','PACs 48.3mg','D-甘露糖1000mg','SNZ1969凝結芽孢乳桿菌','蛋奶素可食','每批第三方檢驗'],
+   link:'https://www.phargoods.com/pages/loveme-probiotics',price:'NT$1,200',
+   sales:[
+     {section:'①　開場建立熟悉感',content:'「您好～我是藥師健生活總公司客服XX，之前您有購買過我們的小莓好蔓越莓益生菌，想跟您關心一下最近的使用狀況～」'},
+     {section:'②　建立需求',content:'上班族版本\n「您平常工作會不會比較忙？像很多女生久坐、忙到憋尿、喝水少，其實私密保養很容易出狀況。尤其冷氣房待整天、作息不正常，很多人都會反反覆覆不舒服。」\n\n女性銀髮族版本\n「現在很多姐姐其實更年期後，保護力會慢慢下降，容易有頻尿、悶悶不舒服的情況。很多客戶以前都覺得是正常老化，後來開始固定保養後，舒適度真的差很多。」'},
+     {section:'③　產品介紹',content:'「我們這款『小莓好』跟一般市面上最大的不同是：\n✔ 高濃度蔓越莓前花青素\n✔ 足量D-甘露糖\n✔ 再搭配女性專利益生菌\n等於是『沖刷＋保護＋調整菌叢』一起做。而且它不是只有加一點點，是做到真正有感劑量。很多女生都是平常保養吃，尤其工作忙、常外出、容易反覆的人回購率很高。」\n「而且它一天一包就可以，很方便。很多客戶都直接放公司、包包或床頭固定吃。味道是淡淡莓果味，不會像藥。」'},
+     {section:'④　拒絕處理',content:'拒絕1：「我現在沒有困擾」\n「懂～其實很多客戶也是『還沒很嚴重』就開始保養。因為女生私密保養比較像日常保養，通常都是反覆了才會覺得麻煩。所以很多人現在反而是提早顧，讓自己舒服一點。」\n\n拒絕2：「我先考慮一下」\n「可以呀～只是現在很多客戶都是趁活動先補起來，因為私密保養通常都會建議至少連續補充一段時間，效果會比較穩定。而且您本身就是舊客，我先幫您保留現在的優惠，之後若您在活動時間內有想購買也比較不會買貴。」\n\n拒絕3：「我有在吃別的」\n「那也很好耶，代表您本來就有保養觀念。我們這款是『蔓越莓＋甘露糖＋專利益生菌』一起搭配，有別於市售單方的蔓越莓，完整度會更高、效果更全面。」'},
+     {section:'⑤　成交收單',content:'「這樣我先幫您安排最近很多女生在回購的優惠組，好嗎？您平常就一天一包固定保養，女生真的會差很多。」\n「我這邊直接幫您打單出貨，配送資料幫您確認一下～」'},
+   ]},
+
+  // id:16 30而力
+  {id:16,name:'30而力 極致戰力瑪卡膠囊',sub:'業界第一添加氧化氮菌 · 七大配方 · 2024年網銷破萬瓶',series:'成人',
+   cat:['上班族','熬夜','運動補給'],
+   veg:true,
+   desc:'業界第一支使用 NO 氧化氮菌的瑪卡產品！七大配方全方位提升戰力：氧化氮菌促進體內一氧化氮代謝、透納葉提升睪固酮濃度、五色瑪卡補充胺基酸礦物質、鋅維持生殖機能、色胺酸助放鬆入睡、精胺酸維持免疫代謝、南瓜籽保養攝護腺。比高劑量精胺酸更溫和有感、不刺激胃，純素膠囊 90 顆，2024 年網銷破萬瓶，每批第三方檢驗。',
+   ing:'氧化氮菌、透納葉萃取、五色瑪卡 120mg、鋅、色胺酸、精胺酸、南瓜籽（純素膠囊，每日3粒）',
+   dose:'日常保養每日 1 顆；加強保養每日 3 顆。空腹或飯後吃都可以，但推薦飯後服用，可以更完整吸收營養素。本品不含咖啡因，非立即見效，建議每天固定時間補充，奠定扎實根基。',
+   fit:'30 歲以上男性、運動族群、需高度專注的工作者、想提升運動表現與性能力者；女生也可服用，幫助提升幸福力與一氧化氮代謝',
+   warn:'懷孕、哺乳、生理期間或大量出血時、身體不適者禁止使用。4 歲以下孩童不建議使用。有特殊疾病者建議諮詢醫師後評估。若吃後感覺淺眠，建議調整為早餐飯後補充。請置於孩童不易取得處。',
+   highlights:['業界第一添加 NO 氧化氮菌','七大配方全方位提升戰力','比精胺酸更溫和不傷胃','透納葉提升睪固酮濃度','純素膠囊 90顆','2024年網銷破萬瓶'],
+   qa:[
+     {q:'30而力是什麼？',a:'30而力是蔡藥師針對 30 歲男性身體轉變所開發的產品，機能重點在性能力、肌肉成長、專注力，核心成分為氧化氮菌，幫助提升體內一氧化氮代謝，比精胺酸更有感，且對人體更溫和。'},
+     {q:'誰適合吃30而力？',a:'30 歲以上的男性都非常適合。若還不到 30 歲但有運動習慣，或工作需要高度專注，也很適合補充。女生也可以使用，幫助一氧化氮代謝與提升幸福力。'},
+     {q:'一天吃多少？飯前還是飯後？',a:'日常保養每日 1 顆，加強保養每日 3 顆。空腹或飯後吃都可以，推薦飯後服用更完整吸收營養素。建議開始補充的前兩週先每天飯後補充 3 顆加強保養，可以分三餐補充，或是固定時間一次補充三顆。'},
+     {q:'有吃B群還需要吃30而力嗎？',a:'需要！30而力機能重點在鞏固男性身體素質（性能力、肌肉成長、專注力），B群則維持身體機能（營養代謝、肌肉疲勞恢復、神經修復）。兩者功能不同、不衝突，可以一起飯後補充，幫助提升運動表現。'},
+     {q:'吃了會睡不著嗎？',a:'不會！氧化氮菌在體內代謝一氧化氮，有些許幫助入睡的效果，且配方中的色胺酸也是助眠成分。若使用後感覺淺眠，建議調整為早餐飯後補充。'},
+     {q:'女生可以吃嗎？',a:'可以！幫助提升體內一氧化氮代謝，也有提升幸福力的效果。配方中的鋅、色胺酸等也是不分性別的保健成分。'},
+   ],
+   tags:['氧化氮菌業界第一','七大配方','透納葉睪固酮','五色瑪卡','純素膠囊','2024網銷破萬瓶'],
+   link:'https://www.phargoods.com/pages/30-men',price:'NT$1,430',
+   sales:[
+     {section:'一、開場',content:'「哈囉您好，我是藥師健生活的XXX～您之前有購買過我們30而力，是平常有運動健身的習慣嗎？」\n「我們有很多有在運動、健身的男性朋友，都有在補充30而力。像很多人平常工作加運動，會慢慢覺得體力恢復沒以前快、精神容易掉，所以想說您如果平常也有在運動，這款應該會蠻適合您，我簡單跟您分享一下～」'},
+     {section:'二、建立需求',content:'「我先跟您確認一下喔～您平常一週大概運動幾次啊？」\n（等客戶回答）\n「那其實很多有在健身、跑步、重訓的朋友都會遇到一個狀況，像是：\n・明明有運動，但恢復速度變慢\n・體力不像以前那麼穩\n・下班後想運動卻容易累\n・專注力跟精神有時候掉很快\n尤其30歲後其實滿明顯的。」'},
+     {section:'三、產品介紹',content:'「30而力它跟一般只有瑪卡或精胺酸的不太一樣，它是目前少數有添加『氧化氮菌』的男性保健。」\n「很多運動族補精胺酸是為了循環跟運動表現，但有些人吃久會胃不舒服。30而力是用氧化氮菌幫助身體自然代謝一氧化氮，相對溫和很多，而且體感其實蠻好的。」\n「再搭配：\n・五色瑪卡 → 幫助精神體力\n・透納葉 → 男性戰力與狀態\n・鋅 → 男性機能\n・色胺酸 → 放鬆與睡眠\n・南瓜籽 → 男性保養\n所以很多健身族會把它當成日常體能保養在吃。」\n\n「很多客人回饋是：\n・運動時耐力比較穩\n・下班後精神不會垮那麼快\n・隔天恢復感比較好\n・整體狀態跟專注度有差\n而且它不是那種刺激型的提神，沒有咖啡因，所以比較屬於身體底子慢慢養起來的感覺。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「我已經有吃B群了」\n「可以一起吃喔～因為B群偏向代謝跟疲勞恢復，30而力比較偏男性體能、循環、專注跟運動表現，其實功能不太一樣，很多健身族是兩個一起搭配。」\n\n拒絕2：「我現在沒有感覺需要」\n「其實很多運動族都是還沒明顯疲勞前就在保養，因為等到狀態掉下來才補，恢復會比較慢。像30而力很多人都是當作長期維持體能跟男性狀態。」\n\n拒絕3：「我怕吃這種會心悸或睡不著」\n「這款不會喔～它沒有咖啡因、牛磺酸那種刺激成分，而且裡面還有色胺酸，很多客人反而覺得睡眠品質有比較穩。」'},
+     {section:'五、成交收單',content:'「因為您本身有在運動，我會蠻建議您至少先吃一個循環看看。很多客人大概1～2週就開始有感，像精神、恢復、運動狀態會比較穩。」\n「我這邊先幫您安排一組體驗看看好嗎？」'},
+   ]},
+
+  // ── 兒童系列 ──
+  // id:14 兒童小魚油
+  {id:14,name:'兒童小魚油',sub:'阿拉斯加鱈魚來源 · DHA:EPA=2:1 · rTG型態',series:'兒童',
+   cat:['學齡兒童','護眼','寶貝成長'],
+   veg:false,
+   desc:'業界唯一塑化劑 0 檢出魚油來源，100% 阿拉斯加野生鱈魚，DHA:EPA = 2:1 最適合孩童的黃金比例，rTG 型態 Omega-3 濃度最高、吸收率最好。小魚造型軟Q好咀嚼，橘子口味無腥味，每批兩家以上第三方檢驗把關。',
+   ing:'DHA 125mg、EPA 63mg（每粒，rTG型態）；明膠來源為牛',
+   dose:'0～6 個月幼兒：建議媽媽吃 DHA70，由哺乳補充給寶寶。6～24 個月幼兒，體重超過 10 公斤：每天 1 顆。2～6 歲每日 1 粒；6 歲以上每日 1～2 粒。建議飯後補充，可直接咀嚼吞服，或撕開小魚球尾巴直接補充魚油（適合咀嚼能力尚在發育的幼兒）。',
+   fit:'2 歲以上挑食或不敢吃魚的孩子、需強化腦部發育與學習專注力的學齡兒童、視力發展期幼兒、容易過敏的孩子（EPA 抗發炎）',
+   warn:'明膠來源為牛，不吃牛的家庭請留意。海鮮過敏者：高純度魚油經過濾精製，通常已去除大部分蛋白質，一般不易引起過敏，但仍建議諮詢醫師。建議與兒童鈣鎂成長配方錯開時段補充（魚油脂肪酸於腸道鹼性環境可能與鈣結合，影響鈣吸收率）。',
+   highlights:['業界唯一塑化劑 0 檢出','100% 阿拉斯加野生鱈魚','DHA:EPA = 2:1 黃金比例','rTG型態高濃度高吸收','小魚造型橘子口味無腥味','兩家以上第三方檢驗'],
+   qa:[
+     {q:'明膠來源是什麼？',a:'小魚球的明膠來源為牛。如果家庭有不吃牛的飲食限制，請留意。'},
+     {q:'海鮮過敏可以食用嗎？',a:'海鮮過敏最常見的原因是針對不新鮮的肉類蛋白質。高純度魚油經過濾和精製，通常已去除大部分蛋白質，一般不易引起過敏反應，但仍建議先諮詢醫師。'},
+     {q:'魚油跟兒童鈣鎂成長配方可以一起補充嗎？',a:'建議分開補充。魚油的脂肪酸在腸道鹼性環境中可能與鈣結合，降低鈣的吸收率，建議錯開時段補充效果更好。'},
+     {q:'孩子還不會咬怎麼辦？',a:'可以撕開小魚球的尾巴，讓孩子直接補充魚油內容物，無須咀嚼膠囊皮。'},
+   ],
+   tags:['塑化劑0檢出','阿拉斯加鱈魚','DHA:EPA=2:1','rTG型態','橘子口味','兩家第三方檢驗'],
+   link:'https://www.phargoods.com/pages/kids-fish-oil',price:'NT$850',
+   sales:[
+     {section:'一、開場',content:'「媽媽您好～我是藥師健生活的XXX～\n之前幫寶貝補充的小魚油，孩子吃得還習慣嗎？」\n（等客戶回應）\n「現在小朋友都很容易挑食啊～很多媽媽都跟我說，魚真的超難餵（笑）」'},
+     {section:'二、建立需求',content:'「其實我後來發現，現在很多孩子不是吃不夠，是吃得不均衡。」\n「尤其像魚類、深海魚那種，很多小朋友根本不敢吃，可是DHA偏偏又是孩子成長期很重要的營養。」\n「像我們很多媽媽會補小魚油，通常是因為：\n✔ 孩子挑食\n✔ 不愛吃魚\n✔ 常看平板手機\n✔ 想補充專注力跟成長營養」\n「而且我們家這款小朋友接受度真的蠻高的，因為是橘子口味，小魚造型，很多孩子都當小軟糖在吃。」'},
+     {section:'三、產品帶入',content:'「媽媽我自己覺得，孩子願意吃其實最重要。」\n「因為很多魚油雖然成分很好，但有魚腥味，小朋友一聞就跑掉了（笑）」\n「我們家這款比較特別的是：\n阿拉斯加鱈魚來源、rTG型態比較好吸收，\n而且每批都有做第三方檢驗，小孩吃起來也比較安心。」'},
+     {section:'四、拒絕處理',content:'客戶說「我先考慮一下」「我再看看」：\n「可以啊～媽媽本來就會比較謹慎。其實很多家長一開始也都是先試看看，後來是孩子願意吃才固定補充。」\n\n客戶說「孩子不一定敢吃」：\n「很多媽媽本來也很擔心這個（笑）但我們家因為是橘子口味，而且小魚造型，接受度其實很高。」\n\n客戶說「有點貴耶」：\n「我懂～現在大家都會比價格。只是很多媽媽後來會發現，最怕的是買便宜結果孩子不吃，那反而更浪費。」\n\n客戶說「家裡還有別牌」：\n「有補充其實就很好了～只是我們家很多媽媽後來會換過來，主要是孩子接受度跟吸收型態差異。」'},
+     {section:'五、收單',content:'「那我先幫媽媽接續安排，孩子補充比較不會中斷，好嗎？」\n「很多媽媽現在都是固定補充，因為孩子吃習慣後，反而比較省心。」\n「那這次我先幫媽媽安排起來喔～」'},
+     {section:'六、結尾',content:'柔和版：「媽媽您可以先試看看，孩子願意吃最重要。」\n關心版：「其實爸媽最辛苦的，就是每天煩惱孩子營養有沒有吃夠。」\n聊天版：「現在找到孩子願意吃、媽媽又安心的，真的比較重要（笑）」'},
+   ]},
+
+  // id:15 兒童益生菌 | 素食者刪除
+  {id:15,name:'兒童益生菌',sub:'Kids Probiotics – GL-104 & F-1 菌種配方',series:'兒童',
+   cat:['寶貝成長','便祕','學齡兒童'],
+   veg:false,
+   desc:'藥師與兒科醫師共同把關，添加醫師指定兩種功能菌（羅伊氏乳桿菌 GL-104、鼠李糖乳桿菌 F-1），每包 100 億菌數，額外添加益萃質（後生元），無色無味、不加糖不加人工香料，幫助調整體質、增強保護力、促進腸道健康。每批產品皆委由兩家以上第三方機構檢驗。',
+   ing:'鼠李糖乳桿菌 F-1、羅伊氏乳桿菌 GL-104（每包共 100 億 CFU）、益萃質（益生菌後生元發酵粉）',
+   dose:'1 歲以下（滿 6 個月起）每日半包；1 歲～未滿 18 歲每日 1 包；18 歲以上成人每日 2 包。飯前飯後皆可，加入 40°C 以下飲品或食物中食用。',
+   fit:'0 到 5 歲體質調整黃金期兒童、容易便祕或腹瀉的寶寶、換季易過敏或異位性皮膚炎兒童、想增強保護力的學齡兒童',
+   warn:'加入飲品或食物溫度需在 40°C 以下，以保護菌種活性。對牛奶蛋白嚴重過敏者建議先諮詢兒科醫師。蛋奶素可食。D3 與兒童益生菌可同時補充，但混合時溫度仍需控制在 40°C 以下。',
+   qa:[
+     {q:'新生兒可以補充嗎？',a:'建議開始吃副食品（約 6 個月）的寶寶就可以補充。未滿 6 個月建議諮詢兒科醫師。'},
+     {q:'是蛋奶素嗎？',a:'是，兒童益生菌為蛋奶素配方。'},
+     {q:'可以加入食物裡一起吃嗎？',a:'可以，無色無味不影響食物口感，請確保溫度在 40°C 以下。'},
+     {q:'跟 D3 可以一起補充嗎？',a:'可以，但混合時需維持 40°C 以下，避免高溫影響活菌。'},
+   ],
+   highlights:['醫師指定 GL-104 + F-1 雙菌種','100 億 CFU / 包','添加益萃質（後生元）','無色無味不加糖','兩家以上第三方檢驗'],
+   tags:['兒科醫師配方','GL-104+F-1','100億菌數','後生元益萃質','蛋奶素','無色無味'],
+   link:'https://www.phargoods.com/pages/probiotics-for-kids',price:'NT$850',
+   sales:[
+     {section:'一、開場',content:'「媽媽您好～我是之前您有購買過我們家兒童系列的XX專員，敝姓X」\n「最近剛好很多媽媽都在幫小朋友做換季保養，所以想說順便關心一下，現在寶貝的腸胃、排便跟換季狀況都還OK嗎？」\n（停一下讓媽媽回答）'},
+     {section:'二、建立需求',content:'情境1：容易感冒／鼻子過敏\n「很多媽媽最近都跟我說，小朋友現在只要天氣一變，就很容易鼻子癢、一直揉鼻子，或者三不五時就感冒。」\n「其實這跟腸道好菌很有關係，因為小朋友的保護力很多都是跟消化道有關。」\n\n情境2：便秘／排便不順\n「有些小朋友現在吃東西比較精緻、水喝少，排便就容易卡卡的，甚至2～3天才一次。」\n「媽媽其實會發現，小朋友排便順了，胃口跟精神都會差很多。」\n\n情境3：挑食／吸收不好\n「現在很多媽媽其實不是只想讓孩子吃很多，而是希望吃進去有吸收到。」\n「所以會開始固定補充益生菌，把腸胃道環境養好，營養吸收也會比較完整。」'},
+     {section:'三、產品介紹',content:'「我們這款兒童益生菌，其實跟外面最大差別是它不是亂配菌種。」\n「它是兒科醫師指定兩支功能菌：」\n・「羅伊氏乳桿菌」GL-104\n・「鼠李糖乳桿菌」F1\n「這兩支在小朋友的體質調整、保護力、排便跟過敏狀況，其實都有很多研究。」\n「而且媽媽我覺得你會喜歡的是，它沒有額外加糖跟人工香料。」\n「因為現在很多兒童益生菌為了讓孩子愛吃，糖都加很重，但其實糖吃太多反而不好。」\n「它吃起來是很淡很淡的奶香澱粉味，小朋友接受度其實很高。」'},
+     {section:'四、建立安全感',content:'「我們是一包100億，屬於兒童很剛好的量。」\n「很多媽媽會以為越高越好，但其實小朋友腸胃還在發育，菌數太高反而不一定適合。」\n「再來它還有加後生元，可以幫助好菌比較快建立環境，所以很多媽媽會覺得孩子吃一陣子後，排便跟換季狀況會慢慢穩定。」'},
+     {section:'五、拒絕處理',content:'拒絕1：家裡還有\n「可以理解～很多媽媽都會先備著。」\n「只是益生菌比較像每天保養，重點是規律補充，不然好菌其實很難穩定住。」\n「尤其換季這段時間，其實很多媽媽都會提前先補。」\n\n拒絕2：小朋友不敢吃\n「這點媽媽可以放心。」\n「因為它沒有酸味，也沒有很重的香料味，大部分小朋友接受度都蠻高。」\n「真的比較挑的，也可以直接加在牛奶或副食品裡。」\n\n拒絕3：價格考慮\n「其實很多媽媽後來固定補充，是因為發現孩子穩定很多。」\n「像排便、請假、換季不舒服這些，如果能減少，媽媽照顧上其實輕鬆很多。」'},
+     {section:'六、成交收單',content:'「所以現在很多媽媽其實都是固定幫孩子每天保養一包，尤其換季前後差很多。」\n「媽媽如果你家寶貝最近剛好有：\n・排便卡卡\n・換季敏感\n・常感冒\n・胃口不好\n其實現在補會很適合。」\n「我先幫您安排X盒，讓孩子先連續補充看看，好菌建立會比較有感，好嗎媽媽？」'},
+   ]},
+
+  // id:17 兒童葡聚醣
+  {id:17,name:'兒童葡聚醣',sub:'挪威 M-GARD® 專利 · 50mg 足量 · 葡萄口味',series:'兒童',
+   cat:['寶貝成長','免疫抗發炎','學齡兒童','便祕'],
+   veg:false,
+   desc:'兒童專科醫師蒼藍鴿嚴選，使用挪威 M-GARD® 國際專利酵母 β-1,3/1,6 葡聚醣，濃度高達 80% 為市售最高，一顆足量添加 50mg，非變性專利製程完整保留β-葡聚醣原態結構，天然萃取、14項過敏原未檢出、無麩質殘留，葡萄口味口嚼錠小朋友樂於補充，每批兩家以上第三方檢驗。',
+   ing:'β-1,3/1,6 葡聚醣（挪威 M-GARD® 酵母萃取）50mg（每粒）、乳糖（動物性來源，蛋奶素）',
+   dose:'1～18 歲每日 1 粒（50mg）；加強保養每日 2 粒。餐前餐後皆可，無溫度限制，可直接咀嚼或磨成粉末加入食品中。開封後兩個月內食用完畢。',
+   fit:'1 歲以上容易生病或反覆感冒的孩子、換季保養、學齡期免疫力加強、想提升保護力的各年齡兒童',
+   warn:'新生兒不建議使用。自體免疫疾病或免疫力亢進患者不可使用。建議與中藥、西藥相隔至少 2 小時補充。含乳糖，為蛋奶素。開封後請於 1～2 個月內食用完畢，存放於 30°C 以下陰涼乾燥處。',
+   highlights:['蒼藍鴿醫師嚴選','挪威 M-GARD® 國際專利','濃度 80% 市售最高','一顆足量 50mg，每日僅 14 元','非變性製程好吸收','14項過敏原未檢出，兩家第三方檢驗'],
+   qa:[
+     {q:'素食者可以補充嗎？',a:'兒童葡聚醣含乳糖（動物性來源），蛋奶素可食，純素者不建議。'},
+     {q:'可以補充維生素C又補充葡聚醣嗎？',a:'可以！維生素C主要維持平日免疫力，葡聚醣增強免疫力，一起補充效果加倍。'},
+     {q:'可以跟益生菌一起吃嗎？',a:'可以，一起補充效果加倍。'},
+     {q:'有溫度限制嗎？',a:'無溫度限制，可加進配方奶、米糊、食物中皆可。'},
+     {q:'大人或孕婦也可以吃兒童葡聚醣嗎？',a:'可以，成人建議量平日保養一天 4 粒（200mg），若想補充更高劑量建議改用成人版挪威葡聚醣。'},
+   ],
+   tags:['蒼藍鴿醫師嚴選','M-GARD®挪威專利','濃度80%','50mg足量','葡萄口味','蛋奶素','兩家第三方檢驗'],
+   link:'https://www.phargoods.com/products/kids-beta-glucan',price:'NT$850',
+   sales:[
+     {section:'一、開場破冰',content:'「哈囉媽媽您好～我是XX，之前您有幫寶貝購買我們家的兒童葡聚醣，不知道最近小朋友狀況都還好嗎？」\n（等客戶回答）\n「我今天打來主要是做一下使用關心，很多媽媽最近天氣變化大，都會特別幫小朋友加強保護力，所以想順便了解一下寶貝最近的狀況～」'},
+     {section:'二、建立需求',content:'情境1：容易感冒\n「現在很多小朋友其實不是大病，就是很容易反覆感冒、流鼻水，尤其去學校之後真的很容易互相傳染。」\n「媽媽應該也有感覺，小朋友一生病，全家作息都會被打亂對不對？」\n\n情境2：挑食／體質差\n「很多媽媽跟我分享，小朋友其實吃飯正常，但體質就是比較敏感，季節交替就很明顯。」\n「所以現在很多家長都會提早保養，不是等生病才補。」'},
+     {section:'三、產品帶入',content:'「像我們家這支兒童葡聚醣，很多媽媽喜歡的點是它成分很單純。」\n「它是挪威M-GARD專利β-葡聚醣，濃度有到80%，是現在市面上很高的等級，而且是用非變性製程，吸收度會比較好。」\n「再來它沒有過敏原、沒有麩質，小朋友吃媽媽也比較安心。」\n「而且是葡萄口味，很多小朋友接受度都滿高的。」\n\n「其實很多媽媽回購都是因為，小朋友上學後比較不容易一直請假。」\n「尤其季節交替、開學、出國前，很多家長都會提前補。」'},
+     {section:'四、拒絕處理',content:'拒絕1：「家裡還有」\n「沒關係媽媽，我很多客戶也會先備著，因為小朋友通常都是突然開始不舒服。」\n「而且葡聚醣本來就是平常保養型，不是等感冒才吃。」\n「現在補貨比較划算，這樣您就不用有需要時原價補。」\n\n拒絕2：「先不用」\n「我懂～很多媽媽其實不是不需要，是最近比較忙。」\n「只是最近天氣變化真的大，小朋友上學接觸又多，現在很多媽媽都會提前保養，避免後面反覆不舒服更累。」\n\n拒絕3：「價格有點高」\n「其實平均一天大概才十幾塊而已，但很多媽媽會覺得，小朋友少請假、少跑診所，就差很多了。」\n「而且我們這支一顆就有50mg足量葡聚醣，其實CP值是很高的。」'},
+     {section:'五、成交收單',content:'輕鬆成交法\n「那媽媽我幫您先補一組，讓寶貝這段時間先穩定保養，好嗎？」\n\n二選一成交\n「媽媽您這次要先補1組，還是很多媽媽會直接補2組比較划算？」\n\n預防型成交\n「最近很多媽媽都提前備著，因為小朋友真的很容易互相傳染，我先幫您安排，這樣您不用等到缺了再補。」'},
+   ]},
+
+  // id:18 兒童鈣鎂 | 素食者刪除
+  {id:18,name:'兒童鈣鎂成長配方',sub:'兒童專科醫師蒼藍鴿打造 · 七大配方',series:'兒童',
+   cat:['寶貝成長','學齡兒童'],
+   veg:false,
+   desc:'由兒童專科醫師蒼藍鴿與蔡藥師共同打造，天然德國牛奶鈣 + 法國海洋鎂，10:1 最接近母乳比例，額外添加內分泌科醫師指定的精胺酸、鋅、維生素K2（鷹嘴豆萃取）、水解蛋黃粉、半乳寡糖七大配方，無額外添加蔗糖，鳳梨檸檬 / 草莓牛奶兩種口味，每批兩家以上第三方檢驗。',
+   ing:'天然牛奶鈣 264mg、海洋鎂 25mg（鈣鎂 10:1）、鷹嘴豆萃取維生素K2、精胺酸、葡萄糖酸鋅、水解蛋黃粉、半乳寡糖（每包）',
+   dose:'1～6 歲每日 1 包；7～18 歲每日 2 包。建議隨餐或飯後補充，可直接食用或加入 40°C 以下飲品 / 食物中。可與 400IU 維生素D3、兒童益生菌一起加入食品中同步補充。',
+   fit:'1 歲以上挑食或飲食不均衡的孩子、乳糖不耐症（鳳梨檸檬口味可食）、0～3 歲發育關鍵期、胃口不好的孩子、需強化骨骼牙齒發育的學齡兒童',
+   warn:'草莓牛奶口味含全脂奶粉，乳糖不耐症孩童請選鳳梨檸檬口味。蛋奶素可食。1歲以下嬰兒建議先諮詢兒科醫師。',
+   highlights:['蒼藍鴿醫師專業打造','鈣鎂 10:1 最接近母乳','七大黃金配方','無額外添加蔗糖','兩家以上第三方檢驗','鳳梨檸檬/草莓牛奶雙口味'],
+   qa:[
+     {q:'乳糖不耐症可以食用嗎？',a:'鳳梨檸檬口味不含乳糖，乳糖不耐症可食用。草莓牛奶口味含全脂奶粉，不建議乳糖不耐症孩童食用。'},
+     {q:'搭配其他兒童系列產品的吃法？',a:'400IU維生素D3、兒童益生菌、兒童鈣鎂成長配方可以一起加入食品補充。若小朋友不喜歡益生菌的味道，可搭配鳳梨檸檬 / 草莓牛奶口味的成長配方一起補充，更好入口。'},
+     {q:'有吃成長配方還需要吃D3嗎？',a:'建議一起補充！維生素D3能幫助鈣質吸收、維持體內血鈣平衡，兩者成分不同但互相助益，搭配效果更佳。'},
+     {q:'為什麼要加薑黃？',a:'主要用於提味，增加口感接受度。'},
+   ],
+   tags:['蒼藍鴿醫師配方','鈣鎂10:1','維生素K2','精胺酸+鋅','半乳寡糖','蛋奶素','雙口味'],
+   link:'https://www.phargoods.com/pages/calcium-for-kids',price:'NT$1,080',
+   sales:[
+     {section:'一、開場',content:'「媽媽您好～我是藥師健生活總公司客服XX、您之前有幫寶貝補充過我們兒童系列的鈣鎂成長配方。」\n「最近有再幫很多媽媽做孩子營養追蹤，所以想關心一下，寶貝最近食慾、睡眠跟成長狀況還可以嗎？」\n（等媽媽回答）'},
+     {section:'二、建立需求',content:'情境1：媽媽說挑食\n「其實很多媽媽現在都跟您一樣耶～小朋友外食多、挑食，鈣質其實很容易不夠。」\n「尤其1歲後開始快速發育，很多孩子牛奶喝不夠，或只吃自己愛吃的，營養就會比較不平均。」\n\n情境2：媽媽說睡不好\n「那其實很多時候不一定只是作息問題喔～像鈣跟鎂除了骨骼發育，也跟睡眠放鬆有關。」\n「很多媽媽補充後都會說，小朋友晚上比較穩、比較好睡。」\n\n情境3：媽媽在意成長\n「現在很多家長都很重視孩子成長期營養，因為0-18歲其實是骨骼發育黃金期。」\n「我們這款不是只有單純補鈣，裡面還有鋅、精胺酸、K2，會一起幫助孩子成長發育需要的營養補充。」'},
+     {section:'三、產品介紹',content:'重點1｜鈣鎂10:1接近母乳比例\n「我們是鈣鎂10:1比例，接近母乳來源，孩子吸收會比較好。」\n\n重點2｜成長鐵三角\n「另外還有添加：\n✔ 精胺酸\n✔ 鋅\n✔ 維生素K2\n這幾個都是很多媽媽現在很重視的成長營養。」\n\n重點3｜沒有額外加蔗糖\n「而且沒有額外添加蔗糖，不像有些兒童營養品會做很甜。」\n「很多媽媽現在都會比較在意糖分，因為糖吃太多也會影響情緒跟學習專注。」\n\n重點4｜小朋友願意吃\n「目前接受度也很好，有鳳梨檸檬跟草莓牛奶口味，小朋友大多願意吃。」'},
+     {section:'四、轉成交',content:'「其實媽媽您現在幫孩子補充，是在補發育期的底子。」\n「很多小孩都是：\n✔ 挑食\n✔ 牛奶喝不夠\n✔ 外食多\n✔ 成長期想加強\n就會固定補充。」\n「我這邊先幫您安排X組，讓寶貝先穩定補充看看，好嗎？」\n（不要問：「要不要買？」）'},
+     {section:'五、拒絕處理',content:'拒絕1：「我再考慮看看」\n「可以呀媽媽～只是孩子成長期其實過得很快，很多家長都是先讓孩子穩定補充一段時間觀察。」\n「而且我們這款很多媽媽會搭配睡前吃，孩子接受度也不錯。」\n\n拒絕2：「家裡還有」\n「那很好耶～代表媽媽本來就很重視孩子營養。」\n「只是很多市售產品其實只有單純補鈣，我們是連鋅、K2、精胺酸一起補進去，營養會比較完整。」\n\n拒絕3：「小朋友不愛吃」\n「這點很多媽媽一開始也會擔心。」\n「但我們做成鳳梨檸檬跟草莓牛奶口味，而且沒有額外加蔗糖，接受度其實很好。」\n「很多媽媽會加牛奶、優格一起搭配，小朋友接受度更高。」'},
+     {section:'六、結尾確認',content:'「好媽媽，那我這邊幫您安排～收到後一天補充X次，飯後或睡前吃都可以。」\n「如果之後孩子吃的狀況不錯，我再幫您追蹤。」'},
+   ]},
+
+  // id:19 兒童D3
+  {id:19,name:'400IU 維生素D3',sub:'兒童版非活性維生素D3 · 0歲起適用',series:'兒童',
+   cat:['寶貝成長','懷孕','女性','學齡兒童'],
+   veg:false,
+   desc:'蔡藥師與兒童專科蒼藍鴿醫師共同研發，瑞士DSM大廠 Quali®-D 羊毛脂來源，每滴精準 400IU，無色無味無添加，水素取代維生素E讓油脂不易氧化變質，一瓶含約 1200 滴，0 歲新生兒至 100 歲銀髮族全家人皆可補充，每批兩家以上第三方檢驗把關。',
+   ing:'維生素D3（Quali®-D 羊毛脂萃取）400IU / 滴、中鏈脂肪酸（MCT）、水素醍醐粉',
+   dose:'嬰幼兒每日 1 滴（400IU）；成人每日 2 滴（800IU）。可直接滴入口中，或加入 40°C 以下飲料、食物中補充，建議隨餐或飯後使用。',
+   fit:'0 歲新生兒（純母乳哺育或每日配方奶 <1000cc 建議補充）、日曬不足的室內工作者、學齡兒童、銀髮族、孕婦及哺乳媽媽、秋冬季節日照減少族群、皮膚細嫩容易曬傷的嬰幼兒',
+   warn:'洗腎患者請諮詢醫師後再補充。羊毛脂來源，蛋奶素可食。滴管不要碰到嘴巴及口水，避免造成變質。開封後請放置常溫陰涼處，避免陽光直射，勿冷藏（冷藏可能造成油脂分層）。',
+   highlights:['瑞士DSM Quali®-D 羊毛脂來源','每滴 400IU，每滴僅 0.7 元','一瓶約 1200 滴 CP 值最高','水素取代維生素E 不易氧化','0歲新生兒即可補充','兩家以上第三方檢驗'],
+   qa:[
+     {q:'是素的嗎？',a:'羊毛脂萃取自綿羊剪下的毛，透過精煉方式提取，蛋奶素可食用。'},
+     {q:'白天還是晚上吃比較好？',a:'白天或晚上影響不大，建議飯後或隨餐補充；比起補充時間，更重要的是長期穩定補充！'},
+     {q:'開封後要冰嗎？',a:'不建議冷藏，冰箱低溫可能讓油脂出現分層。請放在常溫、陽光不直射的地方保存。'},
+     {q:'媽媽有補充D3，新生兒還需要吃嗎？',a:'建議補充！因為無法確定媽媽體內D3含量，透過母乳提供給寶寶的量相對有限，純母乳哺育的寶寶建議額外補充。'},
+     {q:'多滴幾滴會怎樣？',a:'一般人攝取過多維生素D時，身體會代謝為水溶性維生素並透過尿液排出，無須過度擔心。'},
+     {q:'非活性D3與兒童D3有什麼差異？',a:'成人版與兒童版同樣使用羊毛脂萃取，每滴同樣是 400IU，使用方式相同，兒童版包裝劑量更適合寶寶使用。'},
+   ],
+   tags:['Quali®-D瑞士DSM','0歲新生兒','400IU/滴','水素醍醐粉','蛋奶素','兩家第三方檢驗'],
+   link:'https://www.phargoods.com/pages/vitamin-d3',price:'NT$850',
+   sales:[
+     {section:'一、開場',content:'媽媽您好～我是藥師健生活的XXX\n之前有服務過您XXX商品，不知道媽媽還記得我嗎～\n\n今天拜訪您，主要是最近很多媽媽都開始幫小朋友補充「維生素D3」，所以想說順便關心一下寶貝目前有沒有在補充這塊？'},
+     {section:'二、建立需求',content:'如果媽媽說「沒有」：\n真的喔～其實很多媽媽原本也不知道小朋友很容易缺D3耶\n因為現在小朋友：\n‧ 大多待室內、吹冷氣\n‧ 曬太陽時間少\n‧ 有些又挑食\n‧ 喝奶量不一定夠\n所以其實蠻容易攝取不足。而D3最重要的就是幫助鈣質吸收，對小朋友骨骼發育、成長期都很重要。因為要光靠飲食真的不太容易足夠。\n\n如果媽媽說「有補充」：\n媽媽很棒耶 👍 現在有在補D3觀念其實很好。\n因為現在很多兒科也都會提醒，孩子光靠飲食跟曬太陽，其實不一定足夠。\n那媽媽目前是給寶貝吃滴劑還是咀嚼錠呀？（開始聊天）'},
+     {section:'三、產品切入',content:'因為我們家這款很多媽媽固定回購，是因為真的很方便。\n像它：\n‧ 一滴就是一天需求\n‧ 無色無味\n‧ 可以直接滴嘴巴\n‧ 也能滴奶裡、副食品\n很多小朋友其實完全不排斥\n\n而且我們是用瑞士DSM的大廠天然D3來源，吸收度跟穩定性都很好。最重要的是沒有亂加香料、糖分那些。\n\n很多媽媽後來固定補充，都是因為「小朋友成長期真的很需要」。\n尤其大家最重視的就是：\n‧ 骨骼發育\n‧ 鈣質吸收\n‧ 保護力\n所以很多媽媽現在都會把D3當成基礎保養在補。'},
+     {section:'四、拒絕處理',content:'客戶說「家裡還有」：\n可以呀媽媽，那代表媽媽本來就很重視孩子營養。\n我這邊主要是怕很多媽媽補到後面會忘記補貨，所以先幫您確認一下。因為D3其實比較重要的是「穩定每天補充」。\n\n客戶說「我再看看」/「我再考慮看看」：\n可以呀媽媽～我完全懂，保健品本來就是要自己安心才會想給孩子吃。\n今天主要也是先讓媽媽知道，小朋友其實很容易缺D3。很多媽媽都是等到孩子很少曬太陽、挑食、常感冒、進入成長期才開始注意這塊。所以您可以先了解看看，不要有壓力。\n\n客戶說「小朋友不吃」：\n很多媽媽一開始也擔心這個，但因為它沒有味道，所以其實很好加在奶或食物裡。很多媽媽都說孩子根本沒發現。\n\n客戶說「現在先不用」：\n可以理解，只是D3比較不像感冒那種「有狀況才補」。它比較像每天幫孩子把基礎打好。尤其現在很多孩子其實都日曬不足，所以很多媽媽會選擇平常就固定補充。'},
+     {section:'五、成交',content:'媽媽那我這邊先幫您安排X瓶/X組合給寶貝補充看看\n\n因為D3其實就是每天一滴，穩定補充最重要。\n而且全家也都能一起補，很方便。\n\n那我幫您直接打單出貨喔～'},
+   ]},
+
+  // ── 其它系列 ── （運動乳清蛋白已移除）
+  // id:21 大豆蛋白粉 | 不變
+  {id:21,name:'GUYS.EAT 大豆蛋白粉',sub:'健人蓋伊聯名 · 無乳糖 · 完整植物性蛋白質 · 全素可食',series:'其它',
+   cat:['運動補給','素食者'],
+   veg:true,
+   desc:'由健人蓋伊打造的全新運動補充品！完整植物性蛋白質，無乳糖，比起乳清蛋白更有飽足感，易吸收、全素可食。三種口味可選：原味、燕麥、可可，適合素食者、健身熱愛者及一般成人補充每日蛋白質。',
+   ing:'大豆分離蛋白（植物性完整蛋白質）；每包 35g 含蛋白質 30.8g；原味／燕麥／可可 三種口味',
+   dose:'依個人體重及運動量調整，每次加入 400ml 常溫水或冰水搖勻飲用。建議運動前 1 小時或運動後 30 分鐘內補充，或作為兩餐間蛋白質補充，或睡前 2～3 小時補充。',
+   fit:'素食者、乳糖不耐者、健身愛好者、想補充植物性蛋白質的一般成人',
+   warn:'對大豆過敏者請勿使用。建議水溫不超過 70°C，保留完整營養。',
+   highlights:['健人蓋伊聯名設計','無乳糖 比乳清蛋白更有飽足感','完整植物性蛋白質 易吸收','全素可食','原味／燕麥／可可 三種口味'],
+   tags:['GUYS.EAT健人蓋伊','植物性蛋白','無乳糖','全素可食','三種口味'],
+   link:'https://www.phargoods.com/products/guyseat',
+   price:'原味 NT$700 / 燕麥 NT$820 / 可可 NT$820'},
+
+  // id:22 哥吉拉聯名
+  {id:22,name:'哥吉拉聯名乳清蛋白',sub:'哥吉拉限量聯名禮盒 · 三種奶茶口味 · 35g隨手包',series:'其它',
+   cat:['運動補給'],
+   veg:false,
+   desc:'哥吉拉限量聯名款！每盒內含 30 包乳清蛋白隨手包（共 35g／包），烏龍奶茶、黑糖奶茶、泰式奶茶各 10 包，三種台灣在地奶茶風味。隨手包設計輕鬆補充蛋白質，每盒附一款不鏽鋼搖搖杯（700ml，藍色或綠色隨機）。台灣製造，常溫保存。',
+   ing:'烏龍奶茶（每包含蛋白質 21.5g）、黑糖奶茶（每包含蛋白質 20.4g）、泰式奶茶（每包含蛋白質 21.5g）',
+   dose:'每包（35g）加入 300ml 常溫水或冰水搖勻飲用。建議運動前 1 小時或運動後 30 分鐘內補充，或作為兩餐間蛋白質補充，或睡前 2～3 小時補充。',
+   fit:'健身愛好者、喜歡奶茶風味的蛋白質補充需求者、哥吉拉粉絲',
+   warn:'含乳製品及大豆成分，對乳製品或大豆過敏者請勿使用。非純素。建議水溫不超過 70°C，保留完整營養。',
+   highlights:['哥吉拉限量聯名款','烏龍奶茶・黑糖奶茶・泰式奶茶三口味','35g隨手包 30包/盒','附限定不鏽鋼搖搖杯700ml','台灣製造 常溫保存'],
+   tags:['哥吉拉聯名','乳清蛋白','三種奶茶口味','隨手包','台灣製造'],
+   link:'https://www.phargoods.com/products/godzilla-whey-protein-1pack',
+   price:'NT$2,200'},
+
+  // id:25 鯊魚寶寶聯名 兒童鈣鎂成長配方
+  {id:25,name:'【鯊魚寶寶聯名】兒童鈣鎂成長配方',sub:'草莓牛奶口味 · 鯊魚寶寶限量聯名',series:'兒童',
+   cat:['寶貝成長','學齡兒童'],
+   veg:false,
+   desc:'鯊魚寶寶限量聯名！與正版授權鯊魚寶寶合作，草莓牛奶口味，配方與兒童鈣鎂成長配方相同：蒼藍鴿醫師打造七大黃金配方，德國牛奶鈣＋法國海洋鎂10:1，幫助兒童骨骼與牙齒正常發育。',
+   ing:'天然牛奶鈣、海洋鎂（鈣鎂10:1）、維生素K2、精胺酸、葡萄糖酸鋅、水解蛋黃粉、半乳寡糖（每包）',
+   dose:'1～6 歲每日 1 包；7～18 歲每日 2 包。建議隨餐或飯後補充，可直接食用或加入 40°C 以下飲品中。',
+   fit:'1 歲以上兒童、生長發育期、偏食或不喝奶的孩子、草莓牛奶口味的孩子',
+   warn:'草莓牛奶口味含全脂奶粉，乳糖不耐症孩童請改選鳳梨檸檬口味（一般版）。',
+   highlights:['鯊魚寶寶正版聯名','蒼藍鴿醫師七大黃金配方','鈣鎂10:1 最接近母乳','草莓牛奶口味'],
+   tags:['鯊魚寶寶聯名','兒童鈣鎂','草莓牛奶','骨骼發育'],
+   link:'https://www.phargoods.com/products/babyshark-calcium-for-kids-1-pack',
+   price:'NT$1,180'},
+
+  // id:26 鯊魚寶寶聯名 兒童益生菌
+  {id:26,name:'【鯊魚寶寶聯名】兒童益生菌',sub:'鯊魚寶寶限量聯名 · GL-104 & F-1 菌種配方',series:'兒童',
+   cat:['寶貝成長','便祕','學齡兒童'],
+   veg:false,
+   desc:'鯊魚寶寶限量聯名！與正版授權鯊魚寶寶合作，配方與兒童益生菌相同：醫師指定 GL-104＋F-1 雙功能菌種，每包100億CFU，添加益萃質後生元，無色無味，幫助調整體質、增強保護力。',
+   ing:'鼠李糖乳桿菌 F-1、羅伊氏乳桿菌 GL-104（每包共 100 億 CFU）、益萃質（益生菌後生元發酵粉）',
+   dose:'1 歲以下（滿 6 個月起）每日半包；1 歲以上每日 1 包；加強保養早晚各 1 包。',
+   fit:'0 到 5 歲體質調整黃金期兒童、容易便祕或腹瀉的寶寶、換季易過敏兒童、學齡兒童',
+   warn:'加入飲品溫度需在 40°C 以下。對牛奶蛋白嚴重過敏者建議先諮詢兒科醫師。蛋奶素可食。',
+   highlights:['鯊魚寶寶正版聯名','醫師指定 GL-104 + F-1','100億CFU + 益萃質後生元','無色無味不加糖'],
+   tags:['鯊魚寶寶聯名','兒童益生菌','GL-104+F-1','益萃質'],
+   link:'https://www.phargoods.com/products/baby-shark-probiotics-for-kids-1-pack',
+   price:'NT$950'},
+
+  // id:27 鯊魚寶寶聯名 400IU 維生素D3
+  {id:27,name:'【鯊魚寶寶聯名】400IU 維生素D3',sub:'鯊魚寶寶限量聯名 · 瑞士DSM Quali®-D',series:'兒童',
+   cat:['寶貝成長','學齡兒童'],
+   veg:false,
+   desc:'鯊魚寶寶限量聯名！與正版授權鯊魚寶寶合作，配方與 400IU 維生素D3 相同：瑞士DSM Quali®-D 羊毛脂來源，每滴精準 400IU，無色無味，水素醍醐粉取代維生素E不易氧化，0 歲新生兒即可補充。',
+   ing:'維生素D3（Quali®-D 羊毛脂萃取）400IU / 滴、中鏈脂肪酸（MCT）、水素醍醐粉',
+   dose:'嬰幼兒每日 1 滴（400IU）；成人每日 2 滴（800IU）。可直接滴入口中或加入 40°C 以下飲食中。',
+   fit:'0 歲新生兒、日曬不足的嬰幼兒、學齡兒童、銀髮族、孕婦及哺乳媽媽',
+   warn:'洗腎患者請諮詢醫師。蛋奶素可食。開封後常溫陰涼處保存，勿冷藏。',
+   highlights:['鯊魚寶寶正版聯名','瑞士DSM Quali®-D 來源','每滴 400IU','0歲新生兒適用','水素醍醐粉不易氧化'],
+   tags:['鯊魚寶寶聯名','400IU D3','Quali®-D','新生兒適用'],
+   link:'https://www.phargoods.com/products/babyshark-vitamin-d3',
+   price:'NT$950'},
+
+  // id:24 挪威葡聚醣（成人版）
+  {id:24,name:'挪威葡聚醣',sub:'挪威 M-GARD® 專利 · 300mg 高劑量 · 植物膠囊',series:'成人',
+   cat:['免疫抗發炎','上班族','銀髮族','運動補給'],
+   veg:true,
+   desc:'採用挪威 M-GARD® 國際專利酵母 β-1,3/1,6 葡聚醣，濃度高達 80% 為市售最高、含量高於靈芝，每粒足量添加 300mg，植物膠囊純素可食，非變性專利製程完整保留β-葡聚醣原態結構更好吸收，天然萃取無麩質殘留、過敏原未檢出，每批兩家以上第三方檢驗，由專注醫用β-葡聚醣研發逾 30 年的挪威 BBG（現為 Lallemand 旗下）出品。',
+   ing:'β-1,3/1,6 葡聚醣（挪威 M-GARD® 酵母萃取）300mg（每粒）、植物膠囊',
+   dose:'一般保養每日 1 粒（300mg）；加強補充每日 2 粒（600mg）。空腹或飯後皆可。可拆膠囊食用。1～12 歲兒童建議半粒，13 歲以上可補充 1 粒。',
+   fit:'想提升免疫保護力的成人、銀髮族、上班族、運動族群、秋冬換季保健、想補充高劑量葡聚醣者',
+   warn:'新生兒不建議使用。自體免疫疾病或免疫力亢進患者不可使用。建議與中藥、西藥相隔至少 2 小時補充。植物膠囊，純素可食。拆膠囊剩餘粉末請常溫保存並隔日盡快食用完畢。',
+   highlights:['挪威 M-GARD® 國際專利','濃度 80% 市售最高，高於靈芝','每粒足量 300mg 高劑量','非變性製程好吸收','植物膠囊純素可食','兩家以上第三方檢驗'],
+   qa:[
+     {q:'素食者可以補充嗎？',a:'成人挪威葡聚醣為植物膠囊，純素可食。'},
+     {q:'懷孕也可以食用嗎？',a:'可以正常補充，一天保養 1 粒，加強 2 粒。'},
+     {q:'幾歲以上的孩子可以食用成人版？',a:'1～12 歲孩童建議半粒（膠囊拆開吃一半粉末），13 歲以上可補充 1 粒完整劑量。'},
+     {q:'可以跟維生素C一起吃嗎？',a:'可以！維生素C維持平日免疫力，葡聚醣增強免疫力，一起補充效果加倍。'},
+     {q:'兒童葡聚醣和挪威葡聚醣有什麼差異？',a:'兒童版每粒 50mg 口嚼錠（葡萄口味），蛋奶素；成人版每粒 300mg 植物膠囊，純素可食。兩者均使用相同的挪威 M-GARD® 專利原料。'},
+   ],
+   tags:['M-GARD®挪威專利','濃度80%','300mg高劑量','植物膠囊','純素可食','兩家第三方檢驗'],
+   link:'https://www.phargoods.com/pages/adult-beta-glucan',price:'NT$1,350',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「哈囉～您好，我是藥師健生活總公司的客服XX。」\n「之前您有在官網購買過XXX，這邊做一下會員關心。」\n「最近天氣變化比較大，加上很多上班族都熬夜、壓力大，我們最近很多老客戶都在補充一款『挪威葡聚醣』，我想說您平常工作忙，想跟您分享一下～」'},
+     {section:'二、建立需求',content:'版本1：疲累型客戶\n「我發現現在很多上班族其實不是生病，就是容易累、恢復慢。像有些客人都說：以前熬夜隔天還好，現在只要晚睡兩天就整個沒精神。」\n「您最近工作應該也蠻忙的吧？會不會常常有那種：睡醒還是累、容易沒精神的感覺？」\n\n版本2：換季型客戶\n「最近換季其實蠻多人開始補保護力。尤其辦公室、捷運、冷氣房一直循環，很多人會覺得體力下降、精神比較差。」\n「您平常會不會容易覺得：一忙起來就特別容易疲累？」'},
+     {section:'三、產品介紹',content:'「我們這次這款比較特別，它不是一般市面上的普通葡聚醣。」\n「它用的是挪威 M-GARD® 專利β-葡聚醣，濃度有到80%，算是市面很高的等級。」\n「而且它是一顆就有300mg足量，很多客人會拿來當平常保養，尤其熬夜、工作壓力大的人接受度很好。」\n\n「它比較厲害的是它用『非變性製程』。簡單講就是：很多葡聚醣在製程中結構會被破壞，吸收效果差很多。但這款會把葡聚醣完整保留下來，吸收跟利用率會比較好。」'},
+     {section:'四、試探成交',content:'「其實很多客人現在都是：平常保養一天1顆，比較累的時候一天2顆。」\n「我覺得您如果最近比較忙，其實可以先補充一陣子看看。」\n「這次會員剛好有保養方案，我幫您搭一組比較划算的好嗎？」'},
+     {section:'五、拒絕處理',content:'拒絕1：「我現在沒需要」\n「我懂～很多客人一開始也是這樣說。但其實葡聚醣比較像平常打底保養，通常都是：『開始忙、開始累的時候，大家才發現平常沒保養差很多。』尤其現在很多人工作壓力大，其實提前保養會比較輕鬆。」\n\n拒絕2：「我已經有吃維他命C」\n「維他命C其實比較偏基礎保養。但葡聚醣比較像是幫身體防護力做調整，兩個方向不太一樣。很多客人其實都是一起搭配，效果會更完整。」\n\n拒絕3：「太貴了」\n「我懂～現在保健品真的很多。但這款其實差別在原料。它是挪威專利M-GARD®，不是一般低濃度葡聚醣，而且一顆就有300mg足量，很多品牌其實含量不到一半。所以很多客人吃過後，後來還是會回來固定補充。」'},
+     {section:'六、成交收尾',content:'「您先吃看看，通常上班族吃一陣子都蠻有感的。」\n「我幫您今天直接安排出貨，您這幾天就可以收到囉～」'},
+   ]},
+
+  // id:23 1000-C 檸檬發泡錠 | series改成人、素食者刪除、運動補給刪除
+  {id:23,name:'1000-C 檸檬發泡錠',sub:'維生素C 1000mg · 清爽檸檬風味 · 快速補充',series:'成人',
+   cat:['免疫抗發炎','上班族','熬夜'],
+   veg:false,
+   desc:'清爽檸檬風味發泡錠，每錠含維生素C 1000mg，加入水中即可飲用，快速補充、好喝好吸收，隨時隨地守護免疫力。注意：發泡錠請勿直接吞食；本品容易受潮，開封後請儘早使用；瓶蓋內部突起處含乾燥劑請勿打開。',
+   ing:'維生素C 1000mg、天然檸檬風味（每錠）',
+   dose:'每日 1 錠，加入 1000ml 冷水溶解後飲用（1mg 維生素C / 1ml 水）。一日請勿超過 1 錠。',
+   fit:'成人快速補充維生素C、運動後補充、上班族、熬夜族、免疫力保健需求者',
+   warn:'每日勿超過 1 錠。發泡錠請勿直接吞食。本品容易受潮，開封後請儘早使用。',
+   highlights:['維生素C 1000mg 高劑量','清爽檸檬風味好喝好吸收','加水即飲 快速補充','1mg維生素C / 1ml水 比例精準','含乾燥劑設計 保持新鮮'],
+   qa:[
+     {q:'兒童可以喝 1000-C 嗎？幾歲喝幾CC？',a:'可以按比例稀釋補充：1 歲 40ml、4 歲 50ml、7 歲 60ml、10 歲 80ml、13 歲 100ml。'},
+     {q:'一天可以喝超過 1 錠嗎？',a:'一日請勿超過 1 錠。每日維生素C攝取上限為 2000mg，超量無益，請適量食用。'},
+     {q:'可以用熱水沖泡嗎？',a:'建議用冷水溶解飲用，熱水可能影響維生素C的穩定性與活性。'},
+     {q:'開封後要注意什麼？',a:'本品容易受潮，開封後請儘早使用完畢。瓶蓋內部突起處含乾燥劑，請勿打開。發泡錠請勿直接吞食。'},
+   ],
+   tags:['1000mg高劑量','檸檬發泡錠','快速補充','按比例稀釋兒童可用'],
+   link:'https://www.phargoods.com/pages/vitamin-c-1000',price:'NT$249',
+   sales:[
+     {section:'一、開場建立熟悉感',content:'「您好～我是藥師健生活總公司客服XX，之前您有購買過我們的檸檬C發泡錠，想跟您關心一下最近的使用狀況～」\n「因為最近很多上班族天氣熱、吹冷氣，加上工作忙，容易疲勞、沒精神，所以我們很多老客戶最近都會固定補充這款『1000-C檸檬發泡錠』。它喝起來像檸檬氣泡飲，很方便，想說您之前也有在保養，順便跟您分享一下，好嗎？」'},
+     {section:'二、建立需求',content:'「您平常是不是也常常外食、熬夜，或工作比較忙？」\n（等客戶回應）\n（如果客戶說：很累、沒精神、常吹冷氣、很少吃水果、工作壓力大，就接）\n「很多客戶其實跟您一樣，所以現在都會習慣每天泡一杯補充維生素C。尤其這款是發泡錠，很多人喜歡的是：\n・不像吞膠囊有負擔\n・泡水就能喝\n・檸檬口味接受度高\n・上班帶著很方便\n很多客戶下午精神差時都直接泡一杯。」'},
+     {section:'三、產品介紹',content:'「這款是1000mg維生素C檸檬發泡錠，一天一錠就可以。」\n「而且是發泡型，吸收跟飲用習慣都比較方便，很多上班族會拿來代替飲料喝。」\n「尤其現在天氣熱、進出冷氣房，很多人都會固定補充做日常保養。」'},
+     {section:'四、自然帶優惠成交',content:'「剛好您是我們舊客戶，現在有老客戶回購優惠。」\n「今天幫您安排的話，很多客戶都是直接帶2～3瓶比較划算，也比較不用常補貨。」\n「我先幫您安排優惠組，您平常比較習慣放公司喝還是在家裡喝呢？」\n（引導客戶進入使用情境）'},
+     {section:'五、拒絕處理',content:'拒絕1：「我還有」\n「了解～很多客戶也會這樣說。只是發泡錠算消耗很快，而且夏天大家補充速度都會變快，所以很多人會趁有優惠先補起來，避免之後原價買比較不划算。」\n\n拒絕2：「我沒在喝這種」\n「其實很多原本不愛吞保健品的客戶，反而很能接受這種發泡錠。因為喝起來像氣泡飲，接受度很高，上班泡一杯也比較沒負擔。」\n\n拒絕3：「我考慮一下」\n「沒問題～我懂，很多客戶一開始也都會先考慮一下。只是因為這次是舊客戶回購活動，優惠跟贈品都是公司這邊階段性安排，之後不一定還會有現在這個方案。而且像發泡錠這種平常每天都能喝的，很多客戶都是先趁活動補起來，比較划算也不用之後原價補貨。」'},
+     {section:'六、成交',content:'「不然這樣，我先幫您用今天舊客戶的優惠方案安排，因為活動都是階段性的，現在補會比較划算。很多老客戶也都是趁這次順便先備起來，之後喝習慣就不用臨時補貨，您這邊我直接幫您安排好嗎？」'},
+   ]},
+];
+
+const VOICE_LESSONS={
+  kids:[
+    {id:'k1',title:'兒童益生菌',sub:'兒童系列 · 益生菌完整教案',icon:'🦠',iconClass:'green',
+     desc:'由藥師與兒科醫師共同說明，深入解析兒童益生菌的菌種選擇（GL-104 + F-1）、後生元益萃質的作用機制、各年齡層正確補充方式，以及競品完整比較與常見 QA 解說。',
+     topics:['GL-104 + F-1 雙菌種','益萃質後生元','各年齡補充量','競品比較'],
+     videoEmbed:'https://drive.google.com/file/d/1_a7weAeMzTc0CJbcQ6rwHvqIObugkxIb/preview'},
+    {id:'k2',title:'兒童&成人 400IU 維生素D3',sub:'兒童系列 · D3完整教案',icon:'☀️',iconClass:'amber',
+     desc:'蔡藥師與蒼藍鴿醫師共同解說 400IU 維生素D3的來源、功效、各年齡補充劑量，以及與成人版的差異比較。',
+     topics:['Quali®-D來源','各年齡補充量','D3功效','與成人版差異'],
+     videoEmbed:'https://drive.google.com/file/d/12sIcU1QSQrRofQsksgtR7Eo34SFDW0H9/preview'},
+    {id:'k3',title:'兒童鈣鎂成長配方',sub:'兒童系列 · 鈣鎂完整教案',icon:'🦴',iconClass:'blue',
+     desc:'蒼藍鴿醫師打造的七大黃金配方完整解析，從德國牛奶鈣、法國海洋鎂到維生素K2，說明各成分功效與兒童補充建議。',
+     topics:['七大黃金配方','鈣鎂10:1比例','維生素K2','各年齡補充量'],
+     videoEmbed:'https://drive.google.com/file/d/1x4cdmOZ1Xd4_Pw-v1hryygMMwdT9fz-M/preview'},
+    {id:'k4',title:'兒童小魚油',sub:'兒童系列 · 小魚油完整教案',icon:'🐟',iconClass:'blue',
+     desc:'完整解析兒童小魚油的來源、DHA:EPA 黃金比例、rTG型態吸收優勢，以及各年齡層正確補充方式與注意事項。',
+     topics:['阿拉斯加鱈魚來源','DHA:EPA=2:1','rTG型態吸收','各年齡補充量'],
+     videoEmbed:'https://drive.google.com/file/d/1W7a01YCtUSvJICtZWTQ4Z9jvcy3CXg4k/preview'},
+    {id:'k5',title:'兒童&成人葡聚醣',sub:'兒童系列 · 葡聚醣完整教案',icon:'🛡',iconClass:'green',
+     desc:'完整解析兒童與成人葡聚醣的差異、挪威 M-GARD® 專利來源、免疫調節機制，以及各族群的正確補充方式。',
+     topics:['M-GARD®挪威專利','兒童vs成人版差異','免疫調節機制','各年齡補充量'],
+     videoEmbed:'https://drive.google.com/file/d/1bxnybfO8YT0wdg8JtWp0qAtjT2medof4/preview'},
+  ],
+  adults:[
+    {id:'a1',title:'成人版 魚油',sub:'成人系列 · 魚油完整教案',icon:'🐟',iconClass:'blue',
+     desc:'完整解析 EPA70、DHA70、4832 三款魚油的差異、EE/TG/rTG 型態說明、適合族群與正確補充方式。',
+     topics:['EPA vs DHA差異','三款魚油比較','型態吸收說明','各族群補充建議'],
+     videoEmbed:'https://drive.google.com/file/d/14emWF56Tk2VRet_v_dwa9-33br8qRCYf/preview'},
+    {id:'a2',title:'成人版 鎂鈣力',sub:'成人系列 · 鎂鈣力完整教案',icon:'🦴',iconClass:'blue',
+     desc:'解析愛爾蘭海藻鈣與法國海洋鎂的來源、鈣鎂2:1黃金比例、各族群補充建議與注意事項。',
+     topics:['愛爾蘭海藻鈣','法國海洋鎂','鈣鎂2:1比例','補充時機'],
+     videoEmbed:'https://drive.google.com/file/d/11VduOQeh-dBwLvySrYdKrWErBDYrl_vl/preview'},
+    {id:'a3',title:'成人版 五百益生菌',sub:'成人系列 · 五百益生菌完整教案',icon:'🦠',iconClass:'green',
+     desc:'解析三種專利功能複方菌（益生暢、益生衛、益生敏）、五層包埋技術、常溫保存優勢與各年齡補充方式。',
+     topics:['三種專利複方菌','五層包埋技術','常溫保存','各年齡補充量'],
+     videoEmbed:'https://drive.google.com/file/d/1HXVxexIuDmDqORkSD_5oyznIP-98-Q49/preview'},
+    {id:'a4',title:'成人版 30而力',sub:'成人系列 · 30而力完整教案',icon:'💪',iconClass:'amber',
+     desc:'解析業界第一氧化氮菌配方、七大成分功效、前兩週加強與日常保養建議用量，以及適合族群說明。',
+     topics:['氧化氮菌業界第一','七大配方解析','加強與日常用量','適合族群'],
+     videoEmbed:'https://drive.google.com/file/d/1jZVq-SMgHBjubFOA_cYMvUkv9RD5xeBi/preview'},
+    {id:'a5',title:'成人版 關鍵咖好力',sub:'成人系列 · 關鍵咖好力完整教案',icon:'🦴',iconClass:'amber',
+     desc:'解析 C-n2 非變性二型膠原蛋白、六大關鍵配方功效、餐前空腹補充原則與注意事項。',
+     topics:['C-n2來源說明','六大配方功效','補充時機','與UC-II差異'],
+     videoEmbed:'https://drive.google.com/file/d/1nerCnih8wrVWYviAm61HVQzFKX8JUM_S/preview'},
+    {id:'a6',title:'成人版 攔洸葉黃素',sub:'成人系列 · 攔洸葉黃素完整教案',icon:'👁',iconClass:'amber',
+     desc:'解析 Bio-gen 金盞草游離型葉黃素、AstaPure® 蝦紅素、玻尿酸40mg的功效，以及升級版與舊版差異。',
+     topics:['Bio-gen游離型葉黃素','AstaPure®蝦紅素','玻尿酸40mg','升級版差異'],
+     videoEmbed:'https://drive.google.com/file/d/1IjjtozyWBRXp0Z6y7XtGxFz9gmurNZpr/preview'},
+    {id:'a7',title:'成人版 每日B',sub:'成人系列 · 每日B完整教案',icon:'⚡',iconClass:'amber',
+     desc:'解析苯磷硫胺（脂溶性B1）高吸收優勢、天然萃取酵母B群8種成分、芥末子萃取硒54微克，以及純素抗酸膠囊直達小腸的功效。',
+     topics:['苯磷硫胺300倍吸收','天然萃取酵母B群','芥末子萃取硒','純素抗酸膠囊'],
+     videoEmbed:'https://drive.google.com/file/d/1_hLC1DGgzZ3NVV2Uxmrv6296OBZZUWe-/preview'},
+    {id:'a8',title:'成人版 莓日C',sub:'成人系列 · 莓日C完整教案',icon:'🍒',iconClass:'green',
+     desc:'解析法國西印度櫻桃天然萃取、純素抗酸膠囊直達小腸吸收、每顆100mg維生素C，以及美白促膠原合成功效。',
+     topics:['法國西印度櫻桃','純素抗酸膠囊','100mg天然維生素C','美白促膠原'],
+     videoEmbed:'https://drive.google.com/file/d/1o4u5QSn78PK2REPznZ1dm3ybG9IIxSXg/preview'},
+    {id:'a9',title:'成人版 1000-C 檸檬發泡錠',sub:'成人系列 · 1000-C完整教案',icon:'🍋',iconClass:'green',
+     desc:'解析維生素C 1000mg高劑量發泡錠、按比例稀釋兒童也可補充、1000ml水沖泡精準比例，以及快速補充免疫力的使用方式。',
+     topics:['1000mg高劑量','1000ml水沖泡','兒童年齡比例','快速補充免疫'],
+     videoEmbed:'https://docs.google.com/presentation/d/1Pl6ZRSYopKXokZ38nQ-Yx3DftkCGUFIT/embed?start=false&loop=false'},
+    {id:'a10',title:'成人版 小莓好',sub:'成人系列 · 小莓好完整教案',icon:'🫐',iconClass:'green',
+     desc:'解析法國Exocyan™蔓越莓PACs 48.3mg、D-甘露糖1000mg市場最高劑量、SNZ1969凝結芽孢乳桿菌，以及3合1女性私密保養配方。',
+     topics:['Exocyan™蔓越莓','D-甘露糖1000mg','SNZ1969益生菌','女性私密保養'],
+     videoEmbed:'https://drive.google.com/file/d/1O0bCYxhbqclOufw3vIwq7mdgq_KIAQax/preview'},
+    {id:'a11',title:'成人版 天然酵母鋅',sub:'成人系列 · 天然酵母鋅完整教案',icon:'⚡',iconClass:'blue',
+     desc:'解析天然烘焙酵母萃取鋅15mg（≈6顆生蠔）、高生物利用率、適合族群與各種補充情境說明。',
+     topics:['天然烘焙酵母萃取','15mg≈6顆生蠔','高生物利用率','各族群補充建議'],
+     videoEmbed:'https://drive.google.com/file/d/13lzSF-0vToD85Pp5XlyTA2QP29jrLWc6/preview'},
+  ],
+};
+
+const QUIZ_QUESTIONS=[
+  {q:'EPA80 魚油的型態為何？',opts:['TG型態','EE型態','rTG型態','PLs型態'],ans:2,exp:'rTG型態（再酯化三酸甘油酯）是目前吸收率最高的魚油型態，優於一般TG和EE型態。'},
+  {q:'攔洸葉黃素建議隨何種餐點服用？',opts:['空腹服用','隨含油脂餐點','睡前服用','任何時間皆可'],ans:1,exp:'游離型葉黃素為脂溶性成分，隨含油脂餐點服用可顯著提升吸收率。'},
+  {q:'兒童益生菌沖泡時，水溫不可超過？',opts:['30°C','40°C','50°C','60°C'],ans:1,exp:'超過40°C的高溫會破壞益生菌的活性，必須使用40°C以下的溫水沖泡。'},
+  {q:'五百益生菌建議的最佳服用時機為？',opts:['隨餐服用','飯後30分鐘','空腹或飯前30分鐘','睡前'],ans:2,exp:'空腹或飯前30分鐘服用，胃酸分泌較少，有助於活菌順利通過胃部抵達腸道。'},
+  {q:'關鍵咖好力（UC-II）含有什麼特殊成分？',opts:['第一型膠原蛋白','非變性II型膠原蛋白UC-II®','第三型膠原蛋白','水解膠原蛋白'],ans:1,exp:'UC-II® 是非變性II型膠原蛋白，透過口服耐受機制作用於關節，與一般膠原蛋白作用機制不同。'},
+  {q:'以下哪項藥師健生活產品不適合素食者？',opts:['攔洸葉黃素','每日B天然B群','EPA80高純度魚油','天然酵母鋅'],ans:2,exp:'EPA80魚油來源為魚類，不適合素食者。攔洸葉黃素、每日B群、天然酵母鋅均為全素可食。'},
+  {q:'兒童鈣鎂成長配方建議何時服用效果最佳？',opts:['早餐後','午餐後','隨餐服用','睡前'],ans:3,exp:'鈣在夜間入睡後吸收效果較好，且鎂有助於放鬆神經，睡前服用可達最佳效果。'},
+  {q:'鎂鈣力應與哪種補充品間隔至少2小時？',opts:['維他命C','鐵劑','B群','益生菌'],ans:1,exp:'鈣與鐵會競爭相同的吸收通道，同時服用會互相干擾吸收，建議間隔至少2小時。'},
+  {q:'400IU維生素D3嬰幼兒版，新生兒每日建議滴數？',opts:['0.5滴','1滴','2滴','3滴'],ans:1,exp:'新生兒至12個月，每日建議補充1滴（400IU），1歲以上可增加至每日1-2滴。'},
+  {q:'DHA70魚油主要適合哪類族群？',opts:['心血管保健為主','腦部視力保健、備孕婦女','關節保養','消化道健康'],ans:1,exp:'DHA對腦部神經發育與視網膜健康至關重要，同時也是備孕及哺乳婦女的重要補充來源。'},
+];
+
+let curFilter='全部',curSeries='全部',authed=false;
+let quizState={active:false,idx:0,answers:[],answered:false};
+const AUTH_PASS='phargoods2025';
+const pageIds=['search','chat','voice','quiz','exam','score','guide'];
+
+const SCORES=[
+  {date:'2025-06-10',type:'quiz',name:'產品知識測驗 #12',score:90,pass:true,time:'8分22秒'},
+  {date:'2025-06-01',type:'exam',name:'Q2 正式考核',score:84,pass:true,time:'38分15秒'},
+  {date:'2025-05-20',type:'quiz',name:'產品知識測驗 #11',score:80,pass:true,time:'9分10秒'},
+  {date:'2025-05-05',type:'quiz',name:'產品知識測驗 #10',score:70,pass:true,time:'11分30秒'},
+  {date:'2025-04-15',type:'quiz',name:'產品知識測驗 #9',score:60,pass:false,time:'12分55秒'},
+  {date:'2025-03-20',type:'exam',name:'Q1 正式考核',score:88,pass:true,time:'32分40秒'},
+  {date:'2025-03-10',type:'quiz',name:'產品知識測驗 #8',score:100,pass:true,time:'7分02秒'},
+];
+
+function switchPage(id){
+  pageIds.forEach(p=>document.getElementById('page-'+p).classList.toggle('active',p===id));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const idx=pageIds.indexOf(id);
+  if(idx>=0) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if(id==='score') renderScores();
+}
+
+function requireAuth(page){
+  if(authed){switchPage(page);return;}
+  document.getElementById('modalBox').style.maxWidth='400px';
+  const name=page==='quiz'?'測驗':page==='exam'?'考核':'成績';
+  document.getElementById('modalBody').innerHTML=`
+    <div class="auth-box">
+      <div class="auth-icon">🔐</div>
+      <div class="auth-title">需要授權才能繼續</div>
+      <div class="auth-sub">「${name}」功能僅限授權同仁使用<br>請輸入管理員提供的存取密碼</div>
+      <input class="auth-input" type="password" id="authPass" placeholder="請輸入授權密碼" onkeydown="if(event.key==='Enter')doAuth('${page}')">
+      <button class="auth-btn" onclick="doAuth('${page}')">🔓 驗證授權</button>
+      <div class="auth-err" id="authErr">❌ 密碼錯誤，請重新輸入</div>
+      <div class="auth-cancel" onclick="closeModal()">取消</div>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>{const el=document.getElementById('authPass');if(el)el.focus();},100);
+}
+
+function doAuth(page){
+  const val=document.getElementById('authPass').value;
+  if(val===AUTH_PASS){
+    authed=true;closeModal();
+    document.getElementById('modalBox').style.maxWidth='';
+    document.querySelectorAll('.nav-btn.locked').forEach(b=>b.classList.remove('locked'));
+    showToast('✅ 授權成功！歡迎使用進階功能');
+    switchPage(page);
+  } else {
+    document.getElementById('authErr').style.display='block';
+    document.getElementById('authPass').value='';
+    document.getElementById('authPass').focus();
+  }
+}
+
+function seriesBadge(p){const map={成人:'b-adult',兒童:'b-kids',其它:'b-other'};return`<span class="badge ${map[p.series]||'b-adult'}">${p.series}</span>`}
+
+function renderProducts(list){
+  const g=document.getElementById('productsGrid');
+  if(!list.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray400)">找不到符合的產品，請嘗試其他關鍵字</div>';return}
+  g.innerHTML=list.map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="card-series">PHARGOODS+ · ${p.series}系列</div><div class="card-name">${p.name}</div><div class="card-sub">${p.sub}</div><div class="card-desc">${p.desc}</div><div class="card-foot"><div style="display:flex;gap:6px;align-items:center">${seriesBadge(p)}${p.veg?'<span style="font-size:11px">🌱</span>':''}</div><span class="card-more">查看詳情 →</span></div></div>`).join('');
+}
+
+function setSeries(cat,el){
+  curSeries=cat;curFilter='全部';
+  document.querySelectorAll('.series-chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));document.querySelector('.chip').classList.add('on');
+  filterProducts();
+}
+
+function setFilter(cat,el){
+  curFilter=cat;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');
+  filterProducts();
+}
+
+// 素食保健專區篩選：以 veg 欄位判斷；素食者需求標籤以 cat 判斷；其他需求標籤以 cat 判斷
+function filterProducts(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  let list=PRODUCTS;
+  if(curSeries==='素食') list=list.filter(p=>p.veg);
+  else if(curSeries!=='全部') list=list.filter(p=>p.series===curSeries);
+  if(curFilter!=='全部') list=list.filter(p=>p.cat.includes(curFilter));
+  if(q) list=list.filter(p=>p.name.toLowerCase().includes(q)||p.sub.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)||p.ing.toLowerCase().includes(q)||p.tags.some(t=>t.toLowerCase().includes(q)));
+  renderProducts(list);
+}
+
+function openModal(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  document.getElementById('modalBox').style.maxWidth='';
+  const priceHtml = p.price ? `<div style="display:inline-block;margin-bottom:12px;padding:4px 14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border-radius:20px;font-size:14px;font-weight:700;border:1px solid #a5d6a7">💰 官網售價 ${p.price} / 瓶</div>` : '';
+  const salesHtml = p.sales ? `<div class="info-block"><div class="info-lbl">📞 電話銷售話術</div>
+    ${p.sales.map(s=>`<div style="margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb">
+      <div style="padding:8px 14px;background:linear-gradient(135deg,#bfdbfe,#93c5fd);color:#1e3a5f;font-size:12px;font-weight:700">${s.section}</div>
+      <div style="padding:10px 14px;background:#f0f7ff;font-size:12.5px;color:#374151;line-height:1.9;white-space:pre-line">${s.content}</div>
+    </div>`).join('')}
+  </div>` : '';
+  const qaHtml = p.qa ? `<div class="info-block"><div class="info-lbl">常見問答 Q&A</div>${p.qa.map(item=>`<div style="margin-bottom:10px;padding:11px 13px;background:var(--gray50);border-radius:8px;border-left:3px solid var(--brand-mid)"><div style="font-size:13px;font-weight:700;color:var(--brand-dark);margin-bottom:5px">Q：${item.q}</div><div style="font-size:13px;color:var(--gray700);line-height:1.7">A：${item.a}</div></div>`).join('')}</div>` : '';
+  const hlHtml = p.highlights ? `<div class="info-block"><div class="info-lbl">產品亮點</div><div style="display:flex;flex-wrap:wrap;gap:7px">${p.highlights.map(h=>`<span style="padding:5px 13px;background:linear-gradient(135deg,var(--brand-50),var(--brand-pale));color:var(--brand-dark);border-radius:20px;font-size:13px;font-weight:600;border:1px solid var(--brand-100)">✦ ${h}</span>`).join('')}</div></div>` : '';
+  document.getElementById('modalBody').innerHTML=`
+    <div style="font-size:10px;color:var(--gray400);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">PHARGOODS+ · ${p.series}系列</div>
+    <div class="modal-title">${p.name}</div><div class="modal-sub">${p.sub}</div>
+    ${priceHtml}
+    <div class="modal-desc">${p.desc}</div>
+    ${hlHtml}
+    <div class="info-block"><div class="info-lbl">主要成分</div><div class="info-val">${p.ing}</div></div>
+    <div class="info-block"><div class="info-lbl">建議用量</div><div class="info-val">${p.dose}</div></div>
+    <div class="info-block"><div class="info-lbl">適合族群</div><div class="info-val">${p.fit}</div></div>
+    <div class="info-block"><div class="info-lbl">注意事項</div><div class="info-warn">${p.warn}</div></div>
+    ${qaHtml}
+    ${salesHtml}
+    <div class="info-block"><div class="info-lbl">產品標籤</div><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+    <div class="info-block"><div class="info-lbl">官網連結</div><a href="${p.link}" target="_blank" style="font-size:13px;color:var(--brand);text-decoration:underline">${p.link}</a></div>
+    <div class="modal-actions"><button class="btn-outline" onclick="closeModal();switchPage('chat');setTimeout(()=>ss('請詳細介紹${p.name}的功效與注意事項'),300)">詢問 PharBot AI 更多問題 →</button></div>`;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeModal()}
+function closeModal(){document.getElementById('overlay').classList.remove('open')}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+
+/* Chat */
+function getSYSPROMPT(){
+const prodSummary=PRODUCTS.map(p=>`【${p.name}】系列:${p.series}、成分:${p.ing}、用量:${p.dose}、適合:${p.fit}、注意:${p.warn}、售價:${p.price||'請洽官網'}`).join('\n');
+return `你是「藥師健生活（PHARGOODS+）」的內部 AI 助手 PharBot，由蔡藥師的知識庫驅動。
+熟悉所有產品：
+${prodSummary}
+回答原則：
+1. 只能依據上方「產品資料庫」和「常見問答知識庫」的內容回答，不得從外部知識或訓練資料中補充或推測。
+2. 若問題在上述資料中找不到答案，請直接回覆：「該問題目前資料庫中尚未收錄，建議向保健諮詢師或相關同仁確認。」
+3. 用親切、專業的繁體中文回覆。
+4. 涉及嚴重健康問題請建議諮詢醫師。
+5. 關鍵字搜尋原則：當問題包含任何產品名稱或關鍵字（例如「葡聚醣」、「魚油」、「益生菌」等），必須掃描整個知識庫，將所有含該關鍵字的問答逐條完整列出，絕不省略、截斷或合併。
+6. 回答長度不超過 500 字，條列式呈現，清楚易讀。
+
+以下是藥師健生活產品常見問答知識庫，請優先依據以下內容回答同仁問題：
+【ALL相關問答】
+Q: Q:為什麼你們要添加香料/人工色素/XXX這些成分呢?
+A: A:媽媽我們知道您的疑慮和擔心,希望給小孩最有效,安全的補充,我們會添加的這些成分/香料/色素無非是為了增加小孩補充的意願,如果小孩不願意補充或是因飲食來源不足,而影響成長,那是非常可惜的,況且這些含量都不高,全數符合衛福部規定的範圍內,小孩成長只有一次,我們跟您一樣重視,除了您眼睛看的到這些成分,我們更重視您眼睛看不到~像是塑化劑,重金屬,農藥殘留,西藥殘留..等等,這些遠比香料/色素來的更重要許多,影響更大,所以我們的商品除出廠檢驗過以外,我們都會自主2家以上的第三方檢驗,確保送到您手上的商品安全無虞.所以請媽媽放心 ▲商品有問題或是瑕疵時---你該試著了解以下問題 1.購買日期? 2.一開封就有問題?或是開封多久才出現問題? 3.儲存環境?放在哪裡? 4.乾燥劑/棉花團/塑膠紙有丟掉嗎? 5.提供批號或是製造日期/保存期限 6.提供問題商品照片
+Q: Q:健康食品(小綠人標章)就一定比較健康嗎？我該吃健康食品嗎？與一般保健食品的差別是?
+A: A:由於小綠人標章是針對產品的功效及安全性審查，不會特別分析成分組成，因此健康食品也可能含有糖分、香料、化學合成原料等成分，長期補充可能造成代謝負擔。因此無論是補充健康食品、保健食品或是一般食品，都一定要仔細查看營養標示，選擇化學添加少、成分天然和有提供多個安全檢驗報告的產品，才能吃得健康。 藥師健生活每一批產品除了原廠的檢驗報告，另外都還會再自主送往第三方單位進行檢驗，相關原料也是採用大廠有相關醫療期刊的品牌原料，配方更是經由藥師設計，讓您吃的安心也放心 ▲標章有期限 健康食品許可證有效期為 5 年，若未展延即失效，並非永久有效
+Q: Q:公司有哪些保健品最熱銷?
+A: A:400IU維生素D3、葡聚醣、兒童益生菌、兒童鈣鎂成長配方、30而力、EPA70高純度魚油、DHA70高純度魚油、天然酵母鋅、每日B、五百益生菌
+
+【鈣相關問答】
+Q: Q:兒童鈣鎂成長配方~草莓牛奶/鳳梨檸檬有人工色素嗎?
+A: A:草莓牛奶/鳳梨檸檬沒有另外加入人工色素,而草莓果汁粉/鳳梨 果汁粉中有天然的色素
+Q: Q:鈣鎂成長配方實際鋅含量是多少? 大約3mg
+A: A:鋅含量是2.96mg，22mg是原料添加量，含鋅量是13.47%
+Q: Q:客人反應~兒童鈣鎂成長配方很難溶於水?
+A: A: 因為主要成分的牛奶鈣跟海洋鎂本身就難溶於水，但會溶於胃酸在小腸被身體吸收，若泡於水中口感不佳的話，建議可以加入牛奶或是軟泥狀的食品中（如果泥、優格、粥等）讓小朋友補充呦！ PS~2種口味均做過實驗,無論先放水再放粉,或是先放粉再放水,常溫,溫水都能溶解,都不會結塊
+Q: Q:小孩對雞蛋蛋白過敏,想請問兒童鈣鎂成長配方中含有水解蛋黃粉,可以食用嗎?
+A: A:水解蛋黃粉是從雞蛋蛋黃中所萃取,水解後會降低過敏的機率,但過敏體質因人而異,不建議食用,若有需求建議詢問醫師後再食用 ~
+Q: Q:兒童鈣鎂成長配方孕哺乳婦可以吃嗎?
+A: A:因為商品本身就是設計給一歲以上小朋友吃，所以不建議孕哺乳婦女使用,孕哺乳可以食用鎂鈣力喔~
+Q: Q:兒童鈣鎂成長配方鳳梨檸檬和草莓牛奶口味,乳糖不耐症可以食用嗎?
+A: A:您好，我們的鳳梨檸檬口味選用的牛奶鈣裡面不含乳糖成分，可以安心使用！草莓牛奶口味因含有全脂奶粉,故不建議食用喔~
+Q: Q:鈣鎂力打開為何會有塑膠味?
+A: A:那不是塑膠味喔！植物性膠囊(HPMC)的主原料是羥丙基甲基纖維素，從松木杉木或棉花的纖維素提煉而來，氣味是提煉過程產生的，因為罐子是密封的，所以打開的時候味道會比較明顯，一陣子就會好一點！ 如果真的覺得不太能接受，建議可以打開膠囊或是溶在飲品中食用
+Q: Q:客人有胸部囊腫問題,醫師請他勿食用與雌激素相關的成分,鎂鈣力裡有豌豆蛋白,可以食用嗎?
+A: A:豌豆蛋白不含雌激素，尤其是不含異黃酮，是可以放心食用的～如您有疑慮,建議拍下成分表並諮詢您的醫師喔!
+Q: Q:請問成人鎂鈣力,12歲以下的小朋友建議最多2顆的原因是?
+A: A:因為小朋友也會透過飲食補充約莫50%~70%的攝取量，額外補充鎂鈣力是補足每日需求，故這樣建議！若是10-12歲發育期的小朋友，是可以最多補充到三顆 ▲成人鎂鈣力的劑量是2顆~鈣200mg,鎂100mg,等於一顆鈣100mg,鎂一顆50mg,假設7歲會吞膠囊 7-9歲建議量~ 鈣:800mg,鎂170mg 10-12歲建議量~ 鈣:1000mg,鎂230mg
+Q: Q:鎂鈣力中海洋鎂是哪一種鎂呢?
+A: A:鎂鈣力的法國海洋鎂是氧化鎂（MgO），使用溫和且無溶劑的製程可減少產品中鈉和氯的含量～
+
+【魚油相關問答】
+Q: Q:請問小魚球有添加甜味劑嗎?
+A: A:的確膠囊皮的部分是有添加麥芽糖醇，但主要功用為定型及提升口感,其添加量是微量的，可以安心補充
+Q: Q:客人看到官網小魚球成分表上的成分~橘子油香料,想詢問此成分是什麼?(橘子口味)
+A: A:橘子油香料，是以果皮經過加工蒸餾後萃取出來的，是天然來 源喔
+Q: Q:小魚油開封後發現膠囊有凹陷,還可以食用嗎?
+A: A:魚球膠囊皮密度較低,裝罐後因運送途中或保存的關係,環境變化 造成膠囊輕微凹陷,屬於正常物理現象,品質及安全性皆合格,同一 瓶中的其它膠囊能可安心正常食用,不影響營養成分
+Q: Q:請問魚油有IFOS或是ORIVO認證嗎?
+A: A:藥師建生活一共販售4款魚油,其中兒童小魚油/DHA70/4832都有IFOS認證,雖然我們EPA70沒有IFOS認證,但我們的魚油來源是~自阿拉斯加100%鱈魚,是單一魚種萃取,且平均PV<1僅有國際規範的1/5,TOTOX值~1.7遠低於國際規範,這是市場上最新鮮,最安心的魚油! 另外IFOS是沒有檢驗塑化劑的,我們4款魚油都是塑化劑0檢出,檢驗報告都可在官網查詢到,所以請您放心,商品除了有效,我們更重視安全,每批產品自主送第三方檢驗(濃度、重金屬、塑化劑、西藥),沒有問題才會送到您手上喔~
+Q: Q:小魚油有無含碘或是海藻呢?
+A: A:都沒有喔~
+Q: Q:想請問為什麼小朋友的魚油要兩歲以上才能吃呢～？
+A: A:您好，因為2歲以下的寶貝咀嚼能力還在發育中，比較不適合直接嚼食小魚油軟膠囊，如果家中寶貝年紀已滿6個月且體重超過10公斤,可讓小朋友補充一顆,可以剪破膠囊後，加入副食品或用湯匙餵魚油給寶貝唷
+Q: Q:一歲9個月~10公斤,這樣換算下來他需要120mg的含量,那如果超過攝取量的話 身體會有什麼不好的反應嗎?
+A: A:您好，DHA 120mg這是每日建議的參考量,小魚油一顆125mg,彼此的劑量差異並不大,且腸道的吸收率不會是百分百的吸收,所以不會有攝取過量的問題喔~我們的小魚油只要是滿6-24個月,體重超過10公斤,是可以每日補充1顆的喔!
+Q: Q:孕婦/哺乳可以吃兒童小魚球?
+A: A:建議詢問醫生或是建議食用DHA70,針對孕哺乳設計的,溫馨提醒您懷孕32週以上建議諮詢醫師是否持續使用
+Q: Q:客人反應上次購買的魚油膠囊較硬,這次購買的膠囊較軟,如何回覆客戶較好呢?
+A: A:軟膠是明膠（動物性膠原蛋白），延展性很高，剛出廠儲藏溫度比較 低，所以會比較硬，放室溫一段時間後變軟是正常的，這是明膠的特 性，膠囊狀況不影響魚油品質和效果的，但建議購買後還是放在陰涼處 保存！若拆封後接觸到空氣時間長，也會變軟，所以建議拆封後盡快食 用完畢
+Q: Q:客人反應購買的魚油膠囊有時會有黏住情況,如何回覆客戶較好呢?
+A: A: 1.馬上開封有黏住情況:商品未開封前裡面是會有棉花團或是塑膠紙及防潮劑,是為了預防碰撞跟防潮濕,所以黏住的機率不大,若有可稍稍敲打瓶身就會分開,明膠狀況是不影響魚油的品質跟效果的 2.開封一段時間有黏住情況: ⑴環境潮濕，膠皮吸濕導致軟化因此黏住 ⑵環境溫度太高，室溫超過30度，膠皮變軟因此黏住 3.因為成分與其他品牌一樣是使用明膠並無不同～請客人留意存放環境勿放在濕熱的環境中 ▲注意事項:請提醒客人 1.保健品一旦開封,乾燥劑/棉花團/塑膠紙馬上丟!!! 2.保健品存放陰涼 ,乾燥處 ,避免陽光 ,熱源 ,受潮 3.取用時須保持手部乾燥,清潔,最好先將產品倒置到瓶蓋內在取用,千萬不可用手直接伸入瓶罐內接觸產品,減少產品受到汙染 4.拆封後盡快食用完畢！ 魚油會黏住主要有幾個原因： 1.環境潮濕，膠皮吸濕導致軟化因此黏住 2.環境溫度太高，室溫超過30度，膠皮變軟因此黏住 因為成分與其他品牌一樣是使用明膠並無不同～ 比較好的回覆會是請客人留意存放環境勿放在濕熱的環境中，並且膠囊狀況是不影響魚油的品質跟效果的
+Q: Q:為什麼EPA是70%?
+A: A:我們的魚油第一道使用的是冷壓萃取,三酸甘油脂的耗損很低,純度能維 持90%以上,很多大廠沒告訴你的是~很多魚油在初萃時使用高溫分子蒸 餾,導致魚油品質劣化,所以比起市售其它濃度標示更高的魚油,這隻EPA高 純度魚油在身體的吸收利用率是更好的,而且70%是保底濃度,實際的濃度 通常更高,以每一批檢驗報告所呈現的為準喔!
+Q: Q:目前4832魚油和D3的塑化劑(DEHP)都有檢測值,不是未檢出,想請問這2隻商品所檢出的塑化劑來源是源自哪裡呢?
+A: A:本產品中所檢出的塑化劑（DEHP）可能來自原料本身的環境背景值，以及製程、運輸與包裝過程中不可避免的極低度接觸。經檢驗，其含量皆遠低於食品安全法規限量，依照現
+Q: Q:原料本是身沒有塑化劑的嗎?
+A: A:有可能也有,因為像魚身體內一定有極低量的DEHP,就是很多個極低（原料、包裝、運輸過程，甚至到空氣中）加起來就有被檢測出來～
+
+【葡聚醣相關問答】
+Q: Q:兒童葡聚醣呈現紫色是有添加人工色素嗎?
+A: A:兒童葡聚醣的色素來自葡萄所萃取的葡萄皮色素（花青素），屬於天然色素，並非人工合成色素，請安心食用。
+Q: Q:兒童葡聚醣香料來源是天然或是人工?
+A: A:香料是人工的
+Q: Q:有蠶豆症的小孩可以吃葡聚醣嗎?
+A: A:X小姐您好~目前經由研發人員確認葡聚醣裡面沒有含蠶豆症不可使用的物質,若您有疑慮,建議您將葡聚醣的成分表拍下並經由小孩的兒科醫師來判定,並遵從醫囑,我們認為這樣對小孩來說是既安全又安心的作法喔!
+Q: Q:有蠶豆症的小孩可以吃葡聚醣嗎? (詳細版)
+A: A:X小姐您好~目前經由研發人員確認葡聚醣裡面沒有含蠶豆症不可使用的物質,但關於蠶豆症小朋友是否可以食用葡聚醣或是任何的保健品,我們都是採取嚴謹的態度,在實務上我們碰過相同產品,不同醫師因看法不同,有可食用及不可食用,原因是,除蠶豆症外,每個小孩體質不同,醫師會做綜合判斷並告知是否可食用,若您有疑慮,我們會建議您將葡聚醣的成分表拍下並經由小孩的兒科醫師來判定,並遵從醫囑,我們認為這樣對小孩來說是既安全又安心的作法
+Q: Q:葡聚醣裡為何添加蔗糖素?
+A: A:您好，蔗糖素已被台灣衛福部、FDA、EFSA、WHO/JECFA 等國際機構認定為合法可用的食品甜味劑，各國規範均設定了每日容許攝取量，在正常使用範圍內無致癌風險，並廣泛使用於嬰幼兒、成人食品與保健品中。添加的目的只是改善口感，請安心食用。 我們的兒童葡聚醣在成分及安全性上皆是通過第三方檢驗，是可以放心讓孩童補充的呦～
+Q: Q:葡聚醣裡有添加蔗糖素,安全嗎?
+A: A:葡聚醣口含錠中僅含 0.1mg 蔗糖素，這個量遠低於國際建議的安全攝取上限（成人約 900mg/日）。蔗糖素已獲 WHO、FDA、歐盟 等權威機構認可，二十多年來在全球食品中廣泛使用，沒有證據顯示在合法範圍內會造成致癌或健康風險。添加的目的只是改善口感，請安心食用
+Q: Q:客人反應葡聚醣開封後潮濕,會影響其功效嗎?
+A: 先詢問以下4個問題：1.何時開封？開封多久了？ 2.存放地點？ 3.棉花玻璃紙防潮劑有拿出來嗎？ 4.如何取用錠劑？用手？ 因為台灣天氣屬於潮濕氣候,會因為開封時間的長久、保存地點、瓶內棉花玻璃紙防潮劑未拿出，及用手拿取等原因加速產品潮解。 A1開封超過6個月：若發現產品有受潮變質不建議食用，建議開封後六個月內食用完畢，越早越理想。建議開封時馬上把瓶內棉花、玻璃紙、防潮劑丟棄，並盡快在2個月內食用完畢。 A2開封未超過6個月：有些微潮濕情況，除影響風味外，不影響其功效。建議開封時馬上把瓶內棉花、玻璃紙、防潮劑丟棄，並盡快在2個月內食用完畢。 A3放置高溫潮濕環境（如廚房或冰箱）：建議放置室內避光、陰涼、乾燥處。冰箱雖低溫但相對潮濕，只有包裝上註明「需冷藏」的產品才需放冰箱，若家裡有防潮箱更理想。 A4棉花玻璃紙防潮劑未拿出：開封後應立即丟棄乾燥劑和棉花團，否則在非密閉環境下反而持續吸收水分加速潮解。 A5用手直接拿取：建議將保健品倒到瓶蓋上再取用，保持手部乾燥清潔，千萬不要用手直接伸入瓶罐，減少污染。
+
+【每日B相關問答】
+Q: Q:客戶提到因為B群有菸鹼酸(B3)，有些人越吃痛風發作越多次,本身有痛風體質,請問可以吃B群嗎?
+A: A:X先生您好~因每日B的萃取來源為天然酵母啤酒菌株,屬於高普林的原料，故不建議痛風和高尿酸的族群補充喔! ▲你需要了解的~ 1.B3 菸鹼酸（Niacin）雖然擁有抗發炎、穩定神經、降血脂等功效，但同時也可能會抑制尿酸的排出。尤其是啤酒酵母來源的B群,因啤酒酵母屬於高普林食品，若是高尿酸的人食用，可能會增加痛風發生的風險。 2.但也有最新研究發現，適量攝取B1、B2、B6及葉酸等有助於降低體內的尿酸，但過量則會有反效果 3.決醒B群來源是合成B群，B3--20mg/每顆 4.藥健B群來源是天然酵母啤酒菌株,B3--15mg/每顆 5.19歲以上成人~男--16mg,女--14mg,上限35mg ▲X先生除了B3可能會抑制尿酸的排出,您知道也有最新研究發現若是適量攝取B群中的B1、B2、B6及葉酸等也有助於降低體內的尿酸。 所以過量與不足都不好,適當攝取剛剛好,因此若是痛風和高尿酸的族群需要補充B群會建議選取非酵母萃取B群,及適當的劑量,另外一定要記得遵從醫囑,飲食控制,適當運動,每天喝足夠300CC的水喔~
+
+【C相關問答】
+Q: Q:檸檬發泡C所使用來達到發泡效果的是檸檬酸鈉還是碳酸氫鈉?
+A: A:發泡的效果主要是是碳酸氫鈉喔～ ▲檸檬酸鈉本身不會產生發泡效果，用途是： 緩衝 pH（降低酸刺激） 改善口感（比較不那麼酸）
+
+【酵母鋅相關問答】
+Q: Q:產後落髮原因?可以補充那些營養素?
+A: A:產後落髮原因大都來自荷爾蒙的變化,懷孕期間雌激素上升，頭髮變得濃密亮麗；但產後雌激素迅速下降，大量頭髮進入休止期後脫落，形成明顯掉髮潮。產後掉髮,大多數人約1年內會獲得改善,超過1年還是需要尋求醫師的協助~可以補充鋅,鐵,生物素,蛋白質,W3
+Q: Q:酵母鋅15mg,實際鋅含量是多少?
+A: A:就是15mg的鋅離子，原料添加量是150mg，含鋅量是10%
+
+【30而力相關問答】
+Q: Q:30力的葡萄糖酸鋅8mg,實際鋅含量是多少?大約 1.1mg
+A: A:鋅含量是1.07mg，8mg是原料添加量，含鋅量是13.47%
+
+【D3相關問答】
+Q: Q:D3塑化劑檢出值是0.5ppm，請問會對小孩造成影響嗎?
+A: A:根據「降低食品中塑化劑含量之企業指引」，針對嬰幼兒食品中「維生素」類別的塑化劑DEHP管制，法規參考值是1ppm以下。檢驗報告檢出的 0.5 ppm 數值是在此參考值範圍內。 因此，單獨服用此滴劑造成的 DEHP 暴露風險極低，請無須過度擔心。也和您說明，DEHP 是環境荷爾蒙，對小朋友的主要考量是累積暴露，因此平時也須留意接觸的玩具、醫療器材、用品等
+
+【益生菌相關問答】
+Q: Q:兒益所添加的是麥芽糊精?還是異麥牙糊精?
+A: A:是麥芽糊精,非異麥芽糊精,異麥芽糊精是最初期使用的, 但因為口感會很差,且益生菌會明顯結塊所以不使用 ▲異麥芽糊精和難消化麥芽糊精都屬水溶性膳食纖維,一般的麥芽糊精屬於多醣類
+Q: Q:兒童益生菌的食物(益生質)所添加的是?
+A: A:兒童益生菌的食物，我們添加的是後生元，即為益生菌的代謝物
+Q: Q:什麼是麥芽糊精?
+A: A:麥芽糊精（maltodextrin）又稱為水溶性糊精，主要的來源是取自我們常吃到的食物，像玉米、小麥、大米或木薯等全穀類中的澱粉，是一種多醣類。取自天然食物、無副作用，所以是食品製造時常用的「食品原料」。常見於奶粉、沖泡飲品（如濃湯、代餐）、冰品或是餅乾等食品中，而在保健食品中，則以益生菌產品為較常見的搭配
+Q: Q:為何兒益會添加麥芽糊精(賦形劑)呢?
+A: A:麥芽糊精取自天然食物、像玉米、小麥、大米或木薯等全穀類中的澱粉，無副作用，會添加麥芽糊精主要是讓粉末狀的食品更容易成型和改善食品口感,也能改善因纖維而有黏牙、結塊的情形。因此常見於醬料、糖果、餅乾、麵包等產品中，而在保健食品中，則以益生菌產品為較常見的搭配。 ▲麥芽糊精主要的功效是~ 1.麥芽糊精在食品加工與保健食品製程中扮演很重要的角色。它常被作為賦形劑，讓粉末狀的食品更容易成型，例如錠狀、膠囊或小包粉劑。除此之外，它也能作為稀釋劑，改善原料過於濃稠的問題，讓食品在生產過程中更穩定、風味也更自然。 2.改善食品口感 麥芽糊精也能讓液態食品變得更濃稠，提升稠度與口感，同時不會影響原本的風味。像是在糖果中，它能增加韌度，防止結晶或潮解（表層的糖溶解出水），因此常見於醬料、糖果、餅乾、麵包等產品中
+Q: Q:兒童益生菌都是活菌嗎?
+A: A:鼠李糖乳桿菌F-1 & 羅伊氏乳桿菌GL-104 都是活菌喔~
+Q: Q:有顧客反應同一盒兒童益生菌內的粉末顏色不同，請問是什原因呢?
+A: A:您好~兒益菌粉末顏色不同的原因如下~ 1.製程原因 粉狀的益生菌因為粉體有造粒，造粒後每個粒徑不會一致，混合後會有光學反射差異,所造成均勻度的視覺差。其次是分層效應,因為我們的配方是多種混合物，粉體一定會有細粗之分，而粒徑不同也會伴隨著顏色深淺不同，粒徑不同的流動性會造成在混合時流向不一造成不同的分層，不同的分層在充填後也會造成顏色不一的現象。最後就是菌粉的顏色差異。菌粉並不是整批都是一致的顏色。會因為發酵物、培基的殘留，造成菌粉本身就會有落差，在混合時會因為本身色差比例混合的不同也會造成視覺上的差異。 2.環境因素 不同的菌粉吸濕度等不同，所以在製造過程中，會因為吸濕度不同造成不同的菌粉顏色上也會有些微的差異，再加上上面製程的關係就會造成顏色上的差異，但是這是水分造成的光學效應，並非受潮變質。 而吸濕這件事情不可能避免，產線有控制濕度，但不是沒有濕氣喔! 基本上顏色不同只要不要伴隨異味、大量結塊加嚴重變色，都不會是品質問題
+Q: Q:兒童益生菌這次與上吃起來味道不一樣?(客戶反應風味有點差異)
+A: A:因益生菌沒有加香料調味,故風味會有差異的原因如下： 1.菌株本身的風味不可能一致 雖然是同一個菌粉，但是每隻菌的代謝物都會有程度上的差異，這會造成每批菌粉的酸鹼、發酵味都不一樣，甚至每一批的每一口都會有差異。因益生菌是活的，每一隻菌都是個體，並非規格純化的原料，所以菌粉本身的顏色和風味本來就會不一樣。 2.益生菌菌粉一定會殘留培基，而且是合法的。雖然殘留極少，但培基的殘留也會影響每批益生菌粉的風味。 3.乾燥製程的原因 益生菌粉在凍乾或噴乾的過程中，會因為乾燥的速度、表面水分殘留導致味覺的感覺不同，尤其是粉感和後味。 4.不同的菌粉在製造過程中會因為吸濕度的不同，這是最後段可能影響風味的原因。 因味覺非常主觀，尤其我們沒有調香，主觀差異感會更大。所以只要風味不是異味，例如霉味、腐敗氣味。只要是發酵味、穀物味這類，都沒有品質的問題喔!
+Q: Q:請問兒童益生菌的製造地址是?
+A: A:您好~製造廠的詳細地址因為牽涉合作保密，一般品牌都不會對外揭露。我們的產品出廠時除了原廠檢驗報告外,還會自主送驗2家,通過檢驗後才會送到您手上,實際安全性與品質才是我們最重視的地方。所以請您放心!
+
+【咖好力相關問答】
+Q: Q:咖好力葡萄糖胺萃取來源是?
+A: A:葡萄糖胺萃取自蝦蟹殼
+
+【蛋白粉相關問答】
+Q: Q:哥吉拉乳清蛋白,有乳糖不耐症的人可以喝嗎?
+A: A:哥吉拉乳清蛋白是一般的乳清蛋白,乳糖不耐症者較不適合喔~
+Q: Q:為何吃哥吉拉乳清蛋白，都會拉肚子呢?
+A: A:哥吉拉乳清蛋白除了乳清蛋白外也含有乳醣,若您對乳清蛋白敏感或是乳糖不耐就比較不適合喔~建議您可以購買我們的植物性蛋白質~大豆蛋白,不含乳糖,一樣可以補充您所需的蛋白質喔~
+Q: Q:請問大豆蛋白沖泡粉, 是否含有雌激素呢? 顧客本身有子宮肌瘤詢問是否能喝?
+A: A:關於大豆蛋白與子宮肌瘤的疑慮，請不用擔心。我們的大豆蛋白沖泡粉含有的是天然的植物雌激素（大豆異黃酮），它的作用非常微弱，且根據多項營養學研究顯示，適量飲用大豆製品並不會直接導致子宮肌瘤的生成或長大。 但因為每個人的體質與肌瘤狀況不同，若您的主治醫師有特別交代要避開特定飲食，建議您仍以醫師的醫囑為準
+`;
+}
+let chatHist=[],loading=false;
+function getT(){const n=new Date();return`今天 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`}
+function appendMsg(role,txt){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className=`msg ${role}`;d.innerHTML=`<div class="m-av">${role==='bot'?'藥':'我'}</div><div><div class="m-bub">${txt.replace(/\n/g,'<br>')}</div><div class="m-time">${getT()}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function showTyping(){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='msg bot';d.id='typing';d.innerHTML=`<div class="m-av">藥</div><div><div class="m-bub"><span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span></div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function rmTyping(){const t=document.getElementById('typing');if(t)t.remove()}
+async function sendMessage(){
+  const inp=document.getElementById('chatInput');const txt=inp.value.trim();
+  if(!txt||loading)return;
+  inp.value='';loading=true;document.getElementById('sendBtn').disabled=true;
+  appendMsg('user',txt);chatHist.push({role:'user',content:txt});showTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4096,system:getSYSPROMPT(),messages:chatHist})});
+    const data=await r.json();
+    const reply=data.content?.[0]?.text||'抱歉，目前無法取得回應，請稍後再試。';
+    rmTyping();appendMsg('bot',reply);chatHist.push({role:'assistant',content:reply});
+  }catch(e){rmTyping();appendMsg('bot','連線問題，請稍後再試。')}
+  loading=false;document.getElementById('sendBtn').disabled=false;
+}
+function ss(txt){switchPage('chat');document.getElementById('chatInput').value=txt;sendMessage()}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+
+/* Voice */
+let playingId=null,playIntervals={};
+function renderVoice(){
+  function videoCard(v){
+    return `
+    <div class="voice-card" style="max-width:100%">
+      <div class="vc-header">
+        <div class="vc-icon ${v.iconClass}" style="width:48px;height:48px;font-size:22px;flex-shrink:0">${v.icon}</div>
+        <div><div class="vc-title" style="font-size:14px">${v.title}</div><div class="vc-sub">${v.sub}</div></div>
+      </div>
+      <div class="vc-desc">${v.desc}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+        ${v.topics.map(t=>`<span style="padding:3px 10px;background:var(--brand-pale);color:var(--brand-dark);border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--brand-100)">📌 ${t}</span>`).join('')}
+      </div>
+      ${v.videoEmbed ? `
+      <div style="border-radius:10px;overflow:hidden;box-shadow:var(--sh-md);background:#000;position:relative;padding-top:56.25%">
+        <iframe
+          src="${v.videoEmbed}"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
+          allow="autoplay"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div style="margin-top:8px;padding:8px 12px;background:var(--brand-50);border-radius:8px;font-size:11px;color:var(--gray500);display:flex;align-items:center;gap:6px">
+        <span>🎬</span><span>Google 雲端硬碟影片　｜　建議全螢幕觀看以獲得最佳效果</span>
+      </div>` : `
+      <div style="padding:32px;background:var(--gray50);border-radius:10px;text-align:center;border:2px dashed var(--gray200)">
+        <div style="font-size:28px;margin-bottom:8px">🎬</div>
+        <div style="font-size:13px;color:var(--gray400)">影片準備中，敬請期待</div>
+      </div>`}
+    </div>`;
+  }
+
+  const kidsHtml = VOICE_LESSONS.kids.length
+    ? VOICE_LESSONS.kids.map(videoCard).join('')
+    : `<div style="padding:32px;text-align:center;color:var(--gray400);font-size:13px;background:#fff;border-radius:var(--r);border:2px dashed var(--gray200)">🎬 兒童系列影音教案準備中，敬請期待</div>`;
+
+  const adultsHtml = VOICE_LESSONS.adults.length
+    ? VOICE_LESSONS.adults.map(videoCard).join('')
+    : `<div style="padding:32px;text-align:center;color:var(--gray400);font-size:13px;background:#fff;border-radius:var(--r);border:2px dashed var(--gray200)">🎬 成人系列影音教案準備中，敬請期待</div>`;
+
+  document.getElementById('voiceGrid').innerHTML = `
+    <div style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:4px;height:22px;background:var(--brand);border-radius:2px"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--brand-dark)">👶 兒童系列</div>
+        <span style="padding:2px 10px;background:var(--brand-pale);color:var(--brand);border-radius:10px;font-size:11px;font-weight:600">${VOICE_LESSONS.kids.length} 支影片</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:14px">${kidsHtml}</div>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:4px;height:22px;background:var(--accent);border-radius:2px"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--brand-dark)">💊 成人系列</div>
+        <span style="padding:2px 10px;background:var(--accent-pale);color:var(--accent);border-radius:10px;font-size:11px;font-weight:600">${VOICE_LESSONS.adults.length} 支影片</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:14px">${adultsHtml}</div>
+    </div>`;
+}
+function togglePlay(id){
+  if(playingId&&playingId!==id) stopPlay(playingId);
+  if(playingId===id){stopPlay(id);return;}
+  playingId=id;
+  const btn=document.getElementById('play-'+id);
+  btn.classList.add('playing');btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+  const lesson=VOICE_LESSONS.find(v=>v.id===id);
+  const[m,s]=lesson.duration.split(':').map(Number);const total=m*60+s;let elapsed=0;
+  playIntervals[id]=setInterval(()=>{elapsed++;if(elapsed>=total){stopPlay(id);return;}const pct=(elapsed/total*100).toFixed(1);document.getElementById('prog-'+id).style.width=pct+'%';const cm=Math.floor(elapsed/60),cs=elapsed%60;document.getElementById('time-'+id).textContent=`${cm}:${String(cs).padStart(2,'0')} / ${lesson.duration}`;},1000);
+}
+function stopPlay(id){clearInterval(playIntervals[id]);playingId=null;const btn=document.getElementById('play-'+id);if(btn){btn.classList.remove('playing');btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';}}
+function seekTo(e,id){const pct=e.offsetX/e.currentTarget.offsetWidth;document.getElementById('prog-'+id).style.width=(pct*100)+'%';const lesson=VOICE_LESSONS.find(v=>v.id===id);const[m,s]=lesson.duration.split(':').map(Number);const elapsed=Math.floor(pct*(m*60+s));document.getElementById('time-'+id).textContent=`${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')} / ${lesson.duration}`;}
+
+/* Quiz */
+function startQuiz(){quizState={active:true,idx:0,answers:[],answered:false};renderQuestion();document.getElementById('startQuizBtn').style.display='none';}
+function renderQuestion(){
+  const q=QUIZ_QUESTIONS[quizState.idx];
+  document.getElementById('quizContent').innerHTML=`
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:26px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:12px;color:var(--gray400)">第 ${quizState.idx+1} 題 / 共 ${QUIZ_QUESTIONS.length} 題</div>
+        <div style="font-size:12px;color:var(--brand);font-weight:600">${quizState.answers.filter(Boolean).length} 題答對</div>
+      </div>
+      <div class="quiz-progress"><div class="quiz-prog-fill" style="width:${quizState.idx/QUIZ_QUESTIONS.length*100}%"></div></div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-opts" id="quizOpts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="selectOpt(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+      <div id="quizExp" style="display:none;padding:11px;background:var(--brand-50);border-radius:8px;border-left:3px solid var(--brand);font-size:13px;color:var(--gray700);margin-bottom:14px;line-height:1.7"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;color:var(--gray400)">點選選項後確認答案</div>
+        <button class="btn-quiz btn-quiz-primary" onclick="nextQuestion()" id="nextBtn" disabled>${quizState.idx===QUIZ_QUESTIONS.length-1?'查看結果 🎉':'下一題 →'}</button>
+      </div>
+    </div>`;
+}
+function selectOpt(i){
+  if(quizState.answered)return;quizState.answered=true;
+  const q=QUIZ_QUESTIONS[quizState.idx];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts[i].classList.add(i===q.ans?'correct':'wrong');if(i!==q.ans)opts[q.ans].classList.add('correct');
+  opts.forEach(o=>o.disabled=true);quizState.answers.push(i===q.ans);
+  document.getElementById('quizExp').style.display='block';
+  document.getElementById('quizExp').innerHTML=`💡 <strong>解析：</strong>${q.exp}`;
+  document.getElementById('nextBtn').disabled=false;
+  document.getElementById('nextBtn').textContent=quizState.idx===QUIZ_QUESTIONS.length-1?'查看結果 🎉':'下一題 →';
+}
+function nextQuestion(){if(quizState.idx===QUIZ_QUESTIONS.length-1){showQuizResult();return;}quizState.idx++;quizState.answered=false;renderQuestion();}
+function showQuizResult(){
+  const correct=quizState.answers.filter(Boolean).length;
+  const score=Math.round(correct/QUIZ_QUESTIONS.length*100);
+  const pass=score>=70;
+  document.getElementById('quizContent').innerHTML=`
+    <div style="background:#fff;border-radius:var(--r);border:1px solid var(--gray200);padding:30px;text-align:center">
+      <div class="result-circle" style="border-color:${pass?'var(--brand)':'var(--red)'}"><div class="result-score" style="color:${pass?'var(--brand)':'var(--red)'}">${score}</div><div class="result-label">分</div></div>
+      <div style="font-size:15px;font-weight:700;color:var(--gray900);margin-bottom:6px">${pass?'🎉 恭喜通過測驗！':'📚 繼續加油！'}</div>
+      <div style="font-size:13px;color:var(--gray500);margin-bottom:20px">${correct} / ${QUIZ_QUESTIONS.length} 題答對・${pass?'已達及格標準 70 分':'未達及格標準，建議複習後再次測驗'}</div>
+      <button class="btn-quiz btn-quiz-primary" onclick="startQuiz()">🔄 再測一次</button>
+    </div>`;
+  document.getElementById('startQuizBtn').style.display='';document.getElementById('startQuizBtn').textContent='重新測驗';
+  SCORES.unshift({date:new Date().toISOString().split('T')[0],type:'quiz',name:`產品知識測驗 #${SCORES.filter(s=>s.type==='quiz').length+1}`,score,pass,time:'-'});
+}
+function startExam(){showToast('考核功能建置中，預計 Q3 正式上線')}
+
+function renderScores(){
+  const filter=document.getElementById('scoreFilter')?.value||'all';
+  const list=filter==='all'?SCORES:SCORES.filter(s=>s.type===filter);
+  document.getElementById('scoreBody').innerHTML=list.map(s=>`
+    <tr>
+      <td>${s.date}</td>
+      <td><span class="score-badge" style="background:${s.type==='exam'?'#ede9fe':'#e0f2fe'};color:${s.type==='exam'?'#6d28d9':'#0369a1'}">${s.type==='exam'?'正式考核':'練習測驗'}</span></td>
+      <td>${s.name}</td>
+      <td style="font-weight:700;color:${s.score>=80?'var(--brand)':s.score>=70?'var(--accent)':'var(--red)'}">${s.score} 分</td>
+      <td><span class="score-badge ${s.pass?'sb-pass':'sb-fail'}">${s.pass?'✅ 通過':'❌ 未通過'}</span></td>
+      <td style="color:var(--gray400)">${s.time}</td>
+    </tr>`).join('');
+}
+
+renderProducts(PRODUCTS);
+renderVoice();
+renderScores();
+</script>
+<!-- Chart Modal -->
+<div id="chartOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);overflow-y:auto;padding:20px 16px" onclick="if(event.target===this)closeChartModal()">
+  <div id="chartBox" style="background:#fff;border-radius:16px;max-width:960px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden">
+    <div id="chartHeader" style="padding:18px 24px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div id="chartTitle" style="font-size:18px;font-weight:700;color:#1a2e1a"></div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px">藥師健生活 PHARGOODS+</div>
+      </div>
+      <button onclick="closeChartModal()" style="border:none;background:#f3f4f6;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:16px;color:#374151;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
+    </div>
+    <div id="chartContent" style="overflow-x:auto;padding:16px 20px 24px"></div>
+  </div>
+</div>
+
+<script>
+const KIDS_CHART=[
+  {name:'維生素D3（滴劑）\n兒童/成人相同',ing:'D3，1滴400IU\n建議攝取量：\n0-50歲 400IU\n50歲以上 600IU',dose:'隨餐或飯後使用\n嬰幼兒每日1滴；成人每日2滴\n可直接滴入口中或加入飲料/食物\n親餵時滴在乳頭\n加入副食品或牛奶',note:'130°C以下飲品食物\n0-100歲皆可補充\n蛋奶素\n上限：1歲以下1000IU；1歲以上2000IU'},
+  {name:'兒童益生菌（粉狀）',ing:'鼠李糖乳桿菌F-1\n羅伊氏乳桿菌GL-104\n添加益萃質\n每包100億CFU',dose:'6-12個月（有吃副食品）每日半包\n1歲~未滿18歲每日1包\n18歲以上每日2包\n飯前飯後皆可\n加入40度以下飲品/食物內食用',note:'40°C以下\n蛋奶素\n無額外添加糖和人工香料'},
+  {name:'兒童鈣鎂成長配方（粉狀）',ing:'德國牛奶鈣264mg\n法國海洋鎂25mg\n精氨酸200mg\n葡萄糖酸鋅3mg\n水解蛋黃粉50mg\nK2-23微克\n半乳寡糖300mg',dose:'1-6歲每日1包\n7-18歲每日2包\n隨餐/飯後/睡前可\n搭配牛奶、甜點、多多、果汁或開水',note:'鈣鎂10:1最接近母乳比例\n蛋奶素，無額外添加蔗糖\n不建議孕哺乳食用（含精氨酸）\n鳳梨檸檬乳糖不耐可食\n草莓牛奶乳糖不耐不建議'},
+  {name:'兒童小魚球（膠囊）',ing:'DHA~125mg / EPA~63mg\nDHA:EPA=2:1\nOmega-3濃度73%\nrTG型態\n小魚造型橘子口味',dose:'2-6歲每日1顆\n6歲以上每日1-2顆\n隨餐/餐後\n直接咬破咀嚼\n或剪開加入副食品',note:'0-6個月建議媽媽吃DHA70由哺乳補充\n6-24個月體重超過10公斤每日1顆\n魚油跟鈣分開食用\n明膠來源為牛'},
+  {name:'兒童葡聚醣（口嚼錠）\n葡萄口味',ing:'挪威M-GARD®專利β-葡聚醣\n濃度80%市面最高\n非變性製程，無麩質殘留\n過敏原未檢出\n每顆足量50mg',dose:'1-18歲每日1顆，加強每日2顆\n成人及孕婦平日保養每日4顆(200mg)\n空腹或飯後皆可\n可咀嚼/磨粉，無溫度限制\n加進配方奶、米糊、食物中皆可',note:'含乳糖，蛋奶素\n與中藥、西藥相隔至少2小時'},
+];
+const ADULTS_CHART=[
+  {name:'EPA70（膠囊）',ing:'EPA濃度71%\nEPA 710mg / DHA 3mg（每2顆）\nOmega-3濃度84%以上\n100%阿拉斯加鱈魚',dose:'成人平日保養2顆/加強4顆\n未成年日常保養1顆\n建議隨餐或飯後食用\n每日Omega-3不超過2000mg',note:'EE型魚油\n孕哺乳婦先諮詢醫師\n避免與鈣一同食用'},
+  {name:'DHA70（膠囊）',ing:'DHA濃度70%\nDHA 700mg / EPA 20mg（每2顆）\nOmega-3濃度72%以上\n西班牙大廠Solutex',dose:'成人平日保養2顆/加強4顆\n未成年日常保養1顆\n建議隨餐或飯後食用\n每日Omega-3不超過2000mg',note:'TG型魚油\n孕婦32周以上建議諮詢醫師\n避免與鈣一同食用'},
+  {name:'4832（膠囊）',ing:'48%EPA+32%DHA\nEPA 480mg / DHA 320mg（每2顆）\nOmega-3濃度80%以上\n西班牙大廠Solutex',dose:'成人平日保養2顆/加強4顆\n未成年日常保養1顆\n建議隨餐或飯後食用\n每日Omega-3不超過2000mg',note:'rTG型魚油\n孕哺乳婦先諮詢醫師\n避免與鈣一同食用'},
+  {name:'鎂鈣力（膠囊）',ing:'海藻鈣200mg / 鎂100mg\n維生素D 160IU\n越南米蛋白40mg\n比利時豌豆蛋白40mg\n（以上每2顆劑量）',dose:'日常保養2顆；加強保養4顆\n優先建議睡前，飯後亦可\n12歲以下每日最多2顆',note:'孕哺乳婦可食\n素食可食，可拆膠囊\n避免與魚油一同食用'},
+  {name:'五百益生菌（粉狀）',ing:'益生暢 / 益生衛 / 益生敏\n5種益生質\n每包500億CFU',dose:'1歲以上日常保養每日1包\n加強保養每日2包\n5個月~1歲每日半包\n空腹優先；餐後亦可',note:'孕婦可食\n乳糖不耐建議詢問醫師\n奶素可食，無添加香料甜味劑'},
+  {name:'每日B（膠囊）',ing:'天然萃取8種B群\n苯磷硫胺B1（脂溶性B1）\n硒54微克/每顆\n葉酸376微克/每顆',dose:'每日1顆\n餐前餐後皆可\n建議飯後效果最佳',note:'適合孕婦（葉酸足量）\n腸溶膠囊完整吸收\n全素可食'},
+  {name:'30而力（膠囊）',ing:'氧化氮菌3mg、透納葉、南瓜籽\n精氨酸100mg、瑪卡120mg\n鋅8mg（鋅離子1.1mg）\n色胺酸60mg\n（以上每顆劑量）',dose:'日常保養每日1顆\n加強保養每日3顆\n建議餐後吸收更佳\n前2週每日3顆加強\n後續日常保養一天一顆',note:'純素可食\n孕哺乳問醫師\n不建議拆膠囊食用'},
+  {name:'關鍵咖好力（膠囊）',ing:'C-n2 40mg\n雞冠玻尿酸20mg\n橄欖果萃取物50mg\n葡萄糖胺150mg\n軟骨素100mg、薑黃100mg',dose:'每日1-2顆，最多2顆\n空腹效果最佳\n可於餐前1小時或餐與餐之間食用',note:'孕哺乳建議詢問醫師\n素食不建議食用\n可拆膠囊食用'},
+  {name:'攔洸葉黃素（膠囊）',ing:'游離型葉黃素15mg\n玉米黃素3mg / 蝦紅素1mg\n玻尿酸40mg / 山桑子',dose:'每日1顆，餐後食用\n7歲以上兒童可食1顆',note:'孕哺乳建議詢問醫師\n純素可食\n可拆膠囊須馬上食用完畢\n每日上限30mg'},
+  {name:'莓日C（膠囊）',ing:'西印度櫻桃粉100mg/每顆\n七種莓果萃取',dose:'每日1顆\n空腹或餐後皆可\n建議餐後吸收更佳',note:'孕哺乳婦可食，全素可食\n不建議拆膠囊（腸溶型）\n4歲以上可食用'},
+  {name:'1000-C 檸檬發泡錠',ing:'維生素C 1000mg\n維生素B2 1mg、鋅1mg',dose:'每日1錠，加入150ml冷/溫水溶解後飲用\n建議餐後食用',note:'每日勿超過1錠\n苯酮尿症者勿食用\n勿超過40°C熱水\n發泡錠請勿直接吞食，全素可食'},
+  {name:'天然酵母鋅（膠囊）',ing:'鋅15mg，上限35mg',dose:'每日1顆，加強2顆\n飯前或飯後皆可\n優先建議飯後',note:'避免與鈣、鐵、高纖維食物\n茶、咖啡、含鎂補充品同時服用\n全素/孕婦可食'},
+  {name:'小莓好\n蔓越莓益生菌（粉狀）',ing:'前花青素48.3mg\nD-甘露糖1,000mg\nSNZ1969凝結芽孢乳桿菌15億',dose:'日常保養每日1包；加強每日3包\n飯前飯後皆可\n優先建議空腹或飯前',note:'小朋友、男生、經期、孕哺、更年期可食\n孕哺可先詢問醫師\n服用藥物建議先諮詢醫師，蛋奶素'},
+  {name:'挪威葡聚醣（植物膠囊）',ing:'挪威M-GARD®專利β-葡聚醣\n濃度80%市面最高\n非變性製程，無麩質殘留\n過敏原未檢出，每顆足量300mg',dose:'成人/懷孕每日1顆；加強每日2顆\n1~12歲孩童建議半顆\n13歲以上可1顆\n空腹或飯後皆可',note:'純素可食\n與中藥、西藥相隔至少2小時\n可拆膠囊食用'},
+];
+
+function openChartModal(type){
+  const isKids=type==='kids';
+  const data=isKids?KIDS_CHART:ADULTS_CHART;
+  const hdrBg=isKids?'linear-gradient(135deg,#e8f5e9,#c8e6c9)':'linear-gradient(135deg,#e3f2fd,#bbdefb)';
+  const thBg=isKids?'#1b5e20':'#1565c0';
+  const nameColor=isKids?'#1b5e20':'#0d47a1';
+  document.getElementById('chartTitle').textContent=isKids?'📋 藥師健生活 — 兒童版產品總表':'📊 藥師健生活 — 成人版產品總表';
+  document.getElementById('chartHeader').style.background=hdrBg;
+  const toHtml=s=>s.replace(/\n/g,'<br>');
+  const rows=data.map((r,i)=>`
+    <tr style="background:${i%2===0?'#fff':'#f8faff'}">
+      <td style="padding:10px 12px;font-weight:700;color:${nameColor};min-width:130px;border-bottom:1px solid #e5e7eb;vertical-align:top;font-size:12.5px;line-height:1.65">${toHtml(r.name)}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top;font-size:12px;line-height:1.75;color:#374151;min-width:170px">${toHtml(r.ing)}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top;font-size:12px;line-height:1.75;color:#374151;min-width:170px">${toHtml(r.dose)}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top;font-size:12px;line-height:1.75;color:#92400e;min-width:160px">${toHtml(r.note)}</td>
+    </tr>`).join('');
+  document.getElementById('chartContent').innerHTML=`
+    <table style="width:100%;border-collapse:collapse;min-width:680px">
+      <thead>
+        <tr style="background:${thBg};color:#fff">
+          <th style="padding:10px 12px;text-align:left;font-size:13px;font-weight:700">產品名稱</th>
+          <th style="padding:10px 12px;text-align:left;font-size:13px;font-weight:700">商品成分／劑量</th>
+          <th style="padding:10px 12px;text-align:left;font-size:13px;font-weight:700">建議吃法</th>
+          <th style="padding:10px 12px;text-align:left;font-size:13px;font-weight:700">注意事項</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin-top:12px;padding:10px 14px;background:#f8fafc;border-radius:8px;font-size:11px;color:#6b7280;display:flex;align-items:center;gap:6px">
+      <span>📌</span><span>資料來源：藥師健生活官方圖表文件。如需列印，請使用瀏覽器列印功能（Ctrl+P / Cmd+P）。</span>
+    </div>`;
+  document.getElementById('chartOverlay').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closeChartModal(){
+  document.getElementById('chartOverlay').style.display='none';
+  document.body.style.overflow='';
+}
+</script>
+</body>
+</html>
